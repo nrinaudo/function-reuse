@@ -1,0 +1,27 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    FInt[label="F[Int]" class="goal" group="upper"]
+    FList[label="F[List[Item]]" group="upper"]
+    FAs[label="List[F[Item]]" class="start,disabled" group="upper"]
+
+    As[label="List[Item]" group="lower"]
+    Int[group="lower"]
+
+    {
+        rank=same
+        FInt -> Int[class="lift" dir="back" label="lift"]
+    }
+
+    {
+        rank=same
+        FList -> As[class="lift" dir="back" label="lift"]
+    }
+
+    As -> Int[label="totalCost"]
+    FAs -> FList[label="flip" style="invis"]
+    FList -> FInt[label="totalCost.lift"]
+    Start -> FAs[class="start" class="disabled"]
+    FInt -> Goal[class="goal"]
+}

@@ -1,0 +1,68 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    FItem[label="F[Item]" class="start" group="1"]
+    FSeller[label="F[Seller]" group="1"]
+    FBoolean[label="F[Boolean]" group="1" class="goal"]
+    FListReview[label="F[List[Review]]" group="1" style="invis"]
+
+    Item[group="2"]
+    SellerId[group="2"]
+    Seller[group="2"]
+    ListReviewId[label="List[ReviewId]" group="2"]
+    ListFReview[label="List[F[Review]]" group="2" style="invis"]
+    Boolean[group="2"]
+
+    ListReview[label="List[Review]" group="3"]
+    ReviewId[label="ReviewId" group="3"]
+    FReview[label="F[Review]" group="3"]
+
+    ListReview -> Boolean[label="scammyReviews"]
+    ListFReview -> ListReview[style="invis"]
+
+    {
+        rank=same
+        FItem -> Item[style="invis"]
+    }
+
+    {
+        rank=same
+        FSeller -> Seller[style="invis"]
+    }
+
+    {
+        rank=same
+        ListReviewId -> ReviewId[dir="back" class="lift" label="lift" style="invis"]
+    }
+
+    {
+        rank=same
+        ListFReview -> FReview[dir="back" class="lift" label="lift" style="invis"]
+    }
+
+    {
+        rank=same
+        FListReview -> ListReview[dir="back" class="lift" label="lift" style="invis"]
+    }
+
+    {
+        rank=same
+        FBoolean -> Boolean[dir="back" class="lift" label="lift" style="invis"]
+    }
+
+    Item -> SellerId[label="sellerId"]
+    SellerId -> FSeller[label="loadSeller"]
+
+
+    FItem -> FSeller[style="invis"]
+    FSeller -> FListReview[style="invis"]
+    ListFReview -> FListReview[label="flip" style="invis"]
+    FListReview -> FBoolean[style="invis"]
+    ListReviewId -> ListFReview[style="invis"]
+
+    Start -> FItem[class="start"]
+    FBoolean -> Goal[class="goal"]
+    ReviewId -> FReview[label="loadReview"]
+    Seller -> ListReviewId[label="reviews"]
+}
