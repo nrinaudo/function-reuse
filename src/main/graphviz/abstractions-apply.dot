@@ -1,0 +1,4 @@
+digraph {
+    rankdir=TB
+    Functor -> Apply
+}

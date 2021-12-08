@@ -1,0 +1,23 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    Seller[Label="Seller" class="goal" group="upper"]
+    FSeller[label="F[Seller]" class="goal" group="lower" style="invis"]
+
+    Item[class="start,disabled" group="upper"]
+    UUID[label="SellerId" group="upper"]
+
+    {
+        rank=same
+        Seller -> FSeller[style="invis"]
+    }
+
+    Item -> UUID[label="sellerId" class="disabled"]
+    UUID -> Seller[style="invis"]
+    UUID -> FSeller[label="loadSeller" style="invis"]
+
+
+    Start -> Item[class="start,disabled"]
+    Seller -> Goal[class="goal"]
+}

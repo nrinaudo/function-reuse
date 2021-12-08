@@ -1,0 +1,25 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    FAB[label=<<table border='0' cellborder='0'><tr><td>F[Item]</td></tr><tr><td>F[Item]</td></tr></table>> class="start" group="upper"]
+    FC[label="F[Item]" class="goal" group="upper"]
+
+    AB[label=<<table border='0' cellborder='0'><tr><td>Item</td></tr><tr><td>Item</td></tr></table>> group="lower"]
+    C[label="Item" group="lower"]
+
+    {
+        rank=same
+        FAB -> AB[class="lift" label="lift2" dir="back"]
+    }
+
+    {
+        rank=same
+        FC -> C[class="lift" label="lift2" dir="back"]
+    }
+
+    AB -> C[label="cheapest"]
+    FAB -> FC[label="cheapest.lift2"]
+    Start -> FAB[class="start"]
+    FC -> Goal[class="goal"]
+}

@@ -1,0 +1,42 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    FAFB[label=<<table border='0' cellborder='0'><tr><td>F[A]</td></tr><tr><td>F[B]</td></tr></table>> class="start" group="1"]
+    FC[label="F[C]" class="goal" group="1"]
+
+    AB[label=<<table border='0' cellborder='0'><tr><td>A</td></tr><tr><td>B</td></tr></table>> group="5"]
+    C[group="5"]
+
+    A[group="bottom" label="A" group="4" style="invis"]
+    B2C[label="B=>C" group="4" style="invis"]
+
+    FA[label="F[A]" group="3" style="invis"]
+    FB2C[label="F[B=>C]" group="3" style="invis"]
+    FB2FC[label="F[B]=>F[C]" group="2" style="invis"]
+
+    FAFB -> FC[label="uncurried(f.curried.lift⨾split)" style="invis"]
+    AB -> C[label="f"]
+
+    {
+        rank=same
+        FAFB -> FA[class="lift" xlabel="uncurried" dir="back" style="invis"]
+        FA -> A[class="lift" xlabel="lift" dir="back" style="invis"]
+        A -> AB[class="lift" xlabel="curried" dir="back" style="invis"]
+    }
+
+    {
+        rank=same
+        FC -> FB2FC[class="lift" xlabel="uncurried" dir="back" style="invis"]
+        FB2FC -> FB2C[xlabel="split" dir="back" style="invis" class="required"]
+        FB2C -> B2C[class="lift" xlabel="lift" dir="back" style="invis"]
+        B2C -> C[class="lift" xlabel="curried" dir="back" style="invis"]
+    }
+
+    A -> B2C[label="f.curried" style="invis"]
+    FA -> FB2C[label="f.curried.lift" style="invis"]
+    FA -> FB2FC[label="f.curried.lift⨾split" style="invis"]
+
+    Start -> FAFB[class="start"]
+    FC -> Goal[class="goal"]
+}
