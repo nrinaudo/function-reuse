@@ -791,15 +791,11 @@ affordableF(Option(ps5))
 
 --
 
-* `Functor` is about working with a single value in some `F`.
+* `Functor` is about working with a value in some `F`.
 
 --
 
-* It provides `lift`.
-
---
-
-* Or, equivalently, `map`.
+* Its core operation is `lift` or, equivalently, `map`.
 
 ---
 class: center, middle
@@ -1515,7 +1511,6 @@ trait Split[F[_]] extends Functor[F]:
 ## Solution
 
 .center[![Ap](img/ap-hl-split-concrete.svg)]
-
 
 ---
 
@@ -2602,7 +2597,6 @@ def totalCostF[F[_]: LiftValue](
 
 .center[![Pure](img/pure-pre-lift.svg)]
 
-
 ---
 
 ## Intuition
@@ -2791,7 +2785,6 @@ def flip[F[_]: `Apply`, A](
 ```
 ]
 
-
 ---
 
 ## Solution
@@ -2824,7 +2817,6 @@ def flip[F[_]: `LiftValue`, A](
 ## Solution
 
 .center[![Pure](img/pure-after.svg)]
-
 
 ---
 
@@ -3336,7 +3328,6 @@ def seller[F[_]: Functor](
 
 .center[![FlatMap](img/flatMap-pre-lift.svg)]
 
-
 ---
 
 ## Intuition
@@ -3502,7 +3493,6 @@ def seller[F[_]: Functor](
 * `val sellerId = (item: Item) => item.sellerId`
 ```
 ]
-
 
 ---
 
@@ -3708,7 +3698,6 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .center[![FlatMap](img/flatMap-flatMap-hl.svg)]
 
-
 ---
 
 ## Common combinators
@@ -3853,7 +3842,6 @@ trait Flatten[F[_]] extends Functor[F]:
       f.liftFlat.apply(fa)
 ```
 
-
 ---
 
 ## Common combinators
@@ -3871,7 +3859,6 @@ trait Flatten[F[_]] extends Functor[F]:
     def flatMap[B](f: A => F[B]): F[B] =
       f.liftFlat.apply(fa)
 ```
-
 
 ---
 
@@ -3891,7 +3878,6 @@ trait Flatten[F[_]] extends Functor[F]:
       f.liftFlat.apply(fa)
 ```
 
-
 ---
 
 ## Common combinators
@@ -3910,7 +3896,6 @@ trait Flatten[F[_]] extends Functor[F]:
       f.liftFlat.apply(fa)
 ```
 
-
 ---
 
 ## Common combinators
@@ -3928,7 +3913,6 @@ trait Flatten[F[_]] extends Functor[F]:
     def flatMap[B](f: A => F[B]): F[B] =
       `f.liftFlat`.apply(fa)
 ```
-
 
 ---
 
@@ -4003,7 +3987,6 @@ trait Flatten[F[_]] extends Functor[F]:
   fi.flatMap(sellerId andThen loadSeller)
 ```
 ]
-
 
 ---
 
@@ -4172,7 +4155,6 @@ def loadSeller(id: SellerId): Option[Seller] =
   knownSellers.get(id)
 ```
 
-
 ---
 
 ## Verification
@@ -4191,7 +4173,6 @@ val knownSellers = Map(
 def loadSeller(id: SellerId): Option[Seller] =
   knownSellers.get(id)
 ```
-
 
 ---
 
@@ -4297,7 +4278,6 @@ seller(Option(ps5), loadSeller)
   .map(_.name)
 ```
 
-
 ---
 
 ## Verification
@@ -4376,7 +4356,6 @@ trait FlatMap[F[_]]:
       fa => ff.flatMap(f => fa.map(f))
 ```
 
-
 ---
 
 ## Generalisation
@@ -4398,7 +4377,6 @@ trait FlatMap[F[_]]:
     def ap: F[A]=> F[B] =
       fa => `ff.flatMap`(f => fa.map(f))
 ```
-
 
 ---
 
@@ -4631,7 +4609,6 @@ def reviews[F[_]](
 ## Intuition
 
 .center[![Item contexts](img/monad-before-flatMap-required.svg)]
-
 
 ---
 
@@ -5259,9 +5236,25 @@ name: closing
 
 ## If you only remember 1 slide...
 
----
+--
 
-.center[![Item contexts](img/abstractions.svg)]
+* `Functor` is about working with a value in some `F`.
+
+--
+
+* `Apply` is about working with multiple values in some `F`.
+
+--
+
+* `Applicative` is about working with any number of values in some `F`.
+
+--
+
+* `FlatMap` is about working with values in multiple layers of some `F`.
+
+--
+
+* `Monad` is both an `Applicative` and a `FlatMap`.
 
 ---
 class: center, middle
