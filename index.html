@@ -1306,7 +1306,7 @@ def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
 
 ---
 
-## Intuition## Solution
+## Intuition
 
 .diff-add[
 ```scala
@@ -1315,20 +1315,6 @@ def curry[A, B, C](f: (A, B) => C): A => (B => C) =
 
 def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
 * `Function.uncurry(f)`
-```
-]
-
----
-
-## Intuition
-
-.diff-add[
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  f.curried
-
-def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
-  Function.uncurry(f)
 ```
 ]
 
@@ -1530,9 +1516,7 @@ trait Split[F[_]] extends Functor[F]:
 *
 * `extension [A, B, C](f: (A, B) => C)`
 *   `def lift2: (F[A], F[B]) => F[C] =`
-*     `Function.uncurried(`
-*       `f.curried.lift andThen (_.split)`
-*     `)`
+*     `???`
 ```
 ]
 
@@ -1547,9 +1531,7 @@ trait Split[F[_]] extends Functor[F]:
 
   extension [A, B, C](f: (A, B) => C)
     def `lift2`: (F[A], F[B]) => F[C] =
-      Function.uncurried(
-        f.curried.lift andThen (_.split)
-      )
+      ???
 ```
 
 ---
@@ -1563,9 +1545,7 @@ trait Split[F[_]] extends Functor[F]:
 
   extension [A, B, C](`f: (A, B) => C)`
     def lift2: (F[A], F[B]) => F[C] =
-      Function.uncurried(
-        f.curried.lift andThen (_.split)
-      )
+      ???
 ```
 
 ---
@@ -1579,9 +1559,7 @@ trait Split[F[_]] extends Functor[F]:
 
   extension [A, B, C](f: (A, B) => C)
     def lift2: `(F[A], F[B]) => F[C]` =
-      Function.uncurried(
-        f.curried.lift andThen (_.split)
-      )
+      ???
 ```
 
 ---
@@ -1594,6 +1572,7 @@ trait Split[F[_]] extends Functor[F]:
 
 ## Solution
 
+.diff-rm[
 ```scala
 trait Split[F[_]] extends Functor[F]:
   extension [A, B](ff: F[A => B])
@@ -1601,10 +1580,26 @@ trait Split[F[_]] extends Functor[F]:
 
   extension [A, B, C](f: (A, B) => C)
     def lift2: (F[A], F[B]) => F[C] =
-      Function.uncurried(
-        `f.curried.lift` andThen (_.split)
-      )
+*     `???`
 ```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+*     `f.curried.lift`
+
+```
+]
 
 ---
 
@@ -1616,6 +1611,7 @@ trait Split[F[_]] extends Functor[F]:
 
 ## Solution
 
+.diff-add[
 ```scala
 trait Split[F[_]] extends Functor[F]:
   extension [A, B](ff: F[A => B])
@@ -1623,10 +1619,9 @@ trait Split[F[_]] extends Functor[F]:
 
   extension [A, B, C](f: (A, B) => C)
     def lift2: (F[A], F[B]) => F[C] =
-      Function.uncurried(
-        f.curried.lift `andThen (_.split)`
-      )
+*     f.curried.lift `andThen (_.split)`
 ```
+]
 
 ---
 
@@ -1638,6 +1633,7 @@ trait Split[F[_]] extends Functor[F]:
 
 ## Solution
 
+.diff-add[
 ```scala
 trait Split[F[_]] extends Functor[F]:
   extension [A, B](ff: F[A => B])
@@ -1645,10 +1641,11 @@ trait Split[F[_]] extends Functor[F]:
 
   extension [A, B, C](f: (A, B) => C)
     def lift2: (F[A], F[B]) => F[C] =
-      `Function.uncurried`(
-        f.curried.lift andThen (_.split)
-      )
+*     `Function.uncurried(`
+*     `  `f.curried.lift andThen (_.split)
+*     `)`
 ```
+]
 
 ---
 
@@ -2414,6 +2411,37 @@ def totalCostF[F[_]](
   fitems: List[F[Item]]
 ): F[Int] =
   fitems match
+*   case head :: tail => `head + totalCostF(tail)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+*   case head :: tail => `head + totalCostF(tail)`
+    case Nil          => ???
+```
+]
+
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
 *   case head :: tail => `(head, totalCostF(tail)).map2(_.price + _)`
     case Nil          => ???
 ```
@@ -2718,12 +2746,41 @@ def flip[F[_], A](
   fas: List[F[A]]
 ): F[List[A]] =
   fas match
-*   case head :: tail => `(head, flip(tail)).map2(_ :: _)`
+*   case head :: tail => `head :: flip(tail)`
     case Nil          => ???
 ```
 ]
 
-NOTE: THIS NEEDS SOME BETTER EXPLANATIONS
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+*   case head :: tail => `head :: flip(tail)`
+    case Nil          => ???
+```
+]
+
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+*   case head :: tail => `(head, flip(tail)).map2(_ :: _)`
+    case Nil          => ???
+```
+]
 
 ---
 
@@ -2830,6 +2887,71 @@ def totalCostF[F[_]: LiftValue](
 * `fitems match`
 *   `case head :: tail => (head, totalCostF(tail)).map2(_.price + _)`
 *   `case Nil          => 0.liftValue`
+```
+]
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-flip-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `flip[F, Item]`
+```
+]
+
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-totalCost-lift-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* flip[F, Item] `andThen totalCost.lift`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `(`flip[F, Item] andThen totalCost.lift`).apply(fitems)`
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `(flip[F, Item] andThen totalCost.lift).apply(fitems)`
 ```
 ]
 
@@ -3177,7 +3299,43 @@ case class Seller(
 ## Problem
 
 ```scala
-def `seller`[F[_]](
+val `ps5Seller` = Seller(
+  id      = ps5.sellerId,
+  name    = "GameStop",
+  reviews = List(UUID.randomUUID())
+)
+```
+
+---
+
+## Problem
+
+```scala
+val ps5Seller = Seller(
+  `id      = ps5.sellerId`,
+  name    = "GameStop",
+  reviews = List(UUID.randomUUID())
+)
+```
+
+---
+
+## Problem
+
+```scala
+val ps5Seller = Seller(
+  id      = ps5.sellerId,
+  `name    = "GameStop"`,
+  reviews = List(UUID.randomUUID())
+)
+```
+
+---
+
+## Problem
+
+```scala
+def `productSeller`[F[_]](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3189,7 +3347,7 @@ def `seller`[F[_]](
 ## Problem
 
 ```scala
-def seller[`F[_]`](
+def productSeller[`F[_]`](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3201,7 +3359,7 @@ def seller[`F[_]`](
 ## Problem
 
 ```scala
-def seller[F[_]](
+def productSeller[F[_]](
   `fi        : F[Item]`,
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3213,7 +3371,7 @@ def seller[F[_]](
 ## Problem
 
 ```scala
-def seller[F[_]](
+def productSeller[F[_]](
   fi        : F[Item],
   `loadSeller: SellerId => F[Seller]`
 ): F[Seller] =
@@ -3225,7 +3383,7 @@ def seller[F[_]](
 ## Problem
 
 ```scala
-def seller[F[_]](
+def productSeller[F[_]](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): `F[Seller]` =
@@ -3238,7 +3396,7 @@ def seller[F[_]](
 
 .diff-rm[
 ```scala
-def seller[F[_]](
+def productSeller[F[_]](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3252,7 +3410,7 @@ def seller[F[_]](
 
 .diff-add[
 ```scala
-def seller[F[_]](
+def productSeller[F[_]](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3266,7 +3424,7 @@ def seller[F[_]](
 
 .diff-add[
 ```scala
-*def seller[F[_]`: Functor`](
+*def productSeller[F[_]`: Functor`](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3279,7 +3437,7 @@ def seller[F[_]](
 ## Problem
 
 ```scala
-def seller[F[_]: Functor](
+def productSeller[F[_]: Functor](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3289,7 +3447,7 @@ def seller[F[_]: Functor](
 // ⛔ Found:    (loadSeller : SellerId => F[Seller])
 //   Required: Item => Seller
 //   
-//   where:    F is a type in method seller with bounds <: [_] =>> Any
+//   where:    F is a type in method productSeller with bounds <: [_] =>> Any
 ```
 
 ---
@@ -3466,7 +3624,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-rm[
 ```scala
-def seller[F[_]: Functor](
+def productSeller[F[_]: Functor](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3486,7 +3644,7 @@ def seller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def seller[F[_]: Functor](
+def productSeller[F[_]: Functor](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3506,7 +3664,7 @@ def seller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def seller[F[_]: Functor](
+def productSeller[F[_]: Functor](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3527,7 +3685,7 @@ def seller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def seller[F[_]: Functor](
+def productSeller[F[_]: Functor](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3548,7 +3706,7 @@ def seller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def seller[F[_]: Functor](
+def productSeller[F[_]: Functor](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3564,7 +3722,7 @@ def seller[F[_]: Functor](
 
 .diff-rm[
 ```scala
-*def seller[F[_]: `Functor`](
+*def productSeller[F[_]: `Functor`](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3580,7 +3738,7 @@ def seller[F[_]: Functor](
 
 .diff-add[
 ```scala
-*def seller[F[_]: `Flatten`](
+*def productSeller[F[_]: `Flatten`](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3596,7 +3754,7 @@ def seller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3612,7 +3770,7 @@ def seller[F[_]: Flatten](
 
 ## Common combinators
 
-.center[![FlatMap](img/flatMap-complicated-hl.svg)]
+.center[![FlatMap](img/flatMap-lift-flatten-hl.svg)]
 
 ---
 
@@ -3690,13 +3848,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ## Common combinators
 
-.center[![FlatMap](img/flatMap-complicated-hl.svg)]
-
----
-
-## Common combinators
-
-.center[![FlatMap](img/flatMap-flatMap-hl.svg)]
+.center[![FlatMap](img/flatMap-lift-flatten-hl.svg)]
 
 ---
 
@@ -3710,7 +3862,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-rm[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3728,7 +3880,7 @@ def seller[F[_]: Flatten](
 
 .diff-add[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3745,7 +3897,7 @@ def seller[F[_]: Flatten](
 
 .diff-rm[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3762,7 +3914,7 @@ def seller[F[_]: Flatten](
 
 .diff-add[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3778,7 +3930,7 @@ def seller[F[_]: Flatten](
 
 .diff-rm[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3794,7 +3946,7 @@ def seller[F[_]: Flatten](
 
 .diff-add[
 ```scala
-def seller[F[_]: Flatten](
+def productSeller[F[_]: Flatten](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3978,7 +4130,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-rm[
 ```scala
-*def seller[F[_]: `Flatten`](
+*def productSeller[F[_]: `Flatten`](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -3994,7 +4146,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-add[
 ```scala
-*def seller[F[_]: `FlatMap`](
+*def productSeller[F[_]: `FlatMap`](
   fi        : F[Item],
   loadSeller: SellerId => F[Seller]
 ): F[Seller] =
@@ -4141,69 +4293,6 @@ given FlatMap[Option] with
 ## Verification
 
 ```scala
-val ps5Seller = `Seller`(
-  id      = ps5.sellerId,
-  name    = "GameStop",
-  reviews = List(UUID.randomUUID())
-)
-
-val knownSellers = Map(
-  ps5Seller.id -> ps5Seller
-)
-
-def loadSeller(id: SellerId): Option[Seller] =
-  knownSellers.get(id)
-```
-
----
-
-## Verification
-
-```scala
-val ps5Seller = Seller(
-  `id      = ps5.sellerId`,
-  name    = "GameStop",
-  reviews = List(UUID.randomUUID())
-)
-
-val knownSellers = Map(
-  ps5Seller.id -> ps5Seller
-)
-
-def loadSeller(id: SellerId): Option[Seller] =
-  knownSellers.get(id)
-```
-
----
-
-## Verification
-
-```scala
-val ps5Seller = Seller(
-  id      = ps5.sellerId,
-  `name    = "GameStop"`,
-  reviews = List(UUID.randomUUID())
-)
-
-val knownSellers = Map(
-  ps5Seller.id -> ps5Seller
-)
-
-def loadSeller(id: SellerId): Option[Seller] =
-  knownSellers.get(id)
-```
-
----
-
-## Verification
-
-```scala
-val ps5Seller = Seller(
-  id      = ps5.sellerId,
-  name    = "GameStop",
-  reviews = List(UUID.randomUUID())
-)
-
 val knownSellers = Map(
   ps5Seller.id -> ps5Seller
 )
@@ -4217,12 +4306,6 @@ def `loadSeller`(id: SellerId): Option[Seller] =
 ## Verification
 
 ```scala
-val ps5Seller = Seller(
-  id      = ps5.sellerId,
-  name    = "GameStop",
-  reviews = List(UUID.randomUUID())
-)
-
 val knownSellers = Map(
   ps5Seller.id -> ps5Seller
 )
@@ -4236,12 +4319,6 @@ def loadSeller(`id: SellerId`): Option[Seller] =
 ## Verification
 
 ```scala
-val ps5Seller = Seller(
-  id      = ps5.sellerId,
-  name    = "GameStop",
-  reviews = List(UUID.randomUUID())
-)
-
 val knownSellers = Map(
   ps5Seller.id -> ps5Seller
 )
@@ -4255,12 +4332,6 @@ def loadSeller(id: SellerId): `Option[Seller]` =
 ## Verification
 
 ```scala
-val ps5Seller = Seller(
-  id      = ps5.sellerId,
-  name    = "GameStop",
-  reviews = List(UUID.randomUUID())
-)
-
 val knownSellers = Map(
   ps5Seller.id -> ps5Seller
 )
@@ -4274,7 +4345,7 @@ def loadSeller(id: SellerId): Option[Seller] =
 ## Verification
 
 ```scala
-seller(Option(ps5), loadSeller)
+&#x200B;`productSeller`(Option(ps5), loadSeller)
   .map(_.name)
 ```
 
@@ -4283,7 +4354,16 @@ seller(Option(ps5), loadSeller)
 ## Verification
 
 ```scala
-seller(Option(ps5), loadSeller)
+productSeller(`Option(ps5)`, loadSeller)
+  .map(_.name)
+```
+
+---
+
+## Verification
+
+```scala
+productSeller(Option(ps5), loadSeller)
   .map(_.name)
 // val res3: Option[String] = Some(GameStop)
 ```
@@ -4294,7 +4374,7 @@ seller(Option(ps5), loadSeller)
 
 .diff-add[
 ```scala
-trait FlatMap[F[_]]:
+trait FlatMap[F[_]] extends Functor[F]:
   extension [A, B](ffa: F[F[A]])
     def flatten: F[A]
 
@@ -4308,7 +4388,7 @@ trait FlatMap[F[_]]:
 *
 * `extension [A, B](ff: F[A => B])`
 *   `def ap: F[A]=> F[B] =`
-*     `fa => ff.flatMap(f => fa.map(f))`
+*     `???`
 ```
 ]
 
@@ -4317,7 +4397,7 @@ trait FlatMap[F[_]]:
 ## Generalisation
 
 ```scala
-trait FlatMap[F[_]]:
+trait FlatMap[F[_]] extends Functor[F]:
   extension [A, B](ffa: F[F[A]])
     def flatten: F[A]
 
@@ -4331,7 +4411,7 @@ trait FlatMap[F[_]]:
 
   extension [A, B](ff: F[A => B])
     def `ap`: F[A]=> F[B] =
-      fa => ff.flatMap(f => fa.map(f))
+      ???
 ```
 
 ---
@@ -4339,7 +4419,29 @@ trait FlatMap[F[_]]:
 ## Generalisation
 
 ```scala
-trait FlatMap[F[_]]:
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A, B](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+
+  extension [A, B](ff: `F[A => B]`)
+    def ap: F[A]=> F[B] =
+      ???
+```
+
+---
+
+## Generalisation
+
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
   extension [A, B](ffa: F[F[A]])
     def flatten: F[A]
 
@@ -4353,15 +4455,16 @@ trait FlatMap[F[_]]:
 
   extension [A, B](ff: F[A => B])
     def ap: `F[A]=> F[B]` =
-      fa => ff.flatMap(f => fa.map(f))
+      ???
 ```
 
 ---
 
 ## Generalisation
 
+.diff-rm[
 ```scala
-trait FlatMap[F[_]]:
+trait FlatMap[F[_]] extends Functor[F]:
   extension [A, B](ffa: F[F[A]])
     def flatten: F[A]
 
@@ -4375,30 +4478,9 @@ trait FlatMap[F[_]]:
 
   extension [A, B](ff: F[A => B])
     def ap: F[A]=> F[B] =
-      fa => `ff.flatMap`(f => fa.map(f))
+*     `???`
 ```
-
----
-
-## Generalisation
-
-```scala
-trait FlatMap[F[_]]:
-  extension [A, B](ffa: F[F[A]])
-    def flatten: F[A]
-
-  extension [A, B](f: A => F[B])
-    def liftFlat: F[A] => F[B] =
-      f.lift andThen (_.flatten)
-
-  extension [A](fa: F[A])
-    def flatMap[B](f: A => F[B]): F[B] =
-      f.liftFlat.apply(fa)
-
-  extension [A, B](ff: F[A => B])
-    def ap: F[A]=> F[B] =
-      fa => ff.flatMap(`f => fa.map(f)`)
-```
+]
 
 ---
 
@@ -4406,7 +4488,55 @@ trait FlatMap[F[_]]:
 
 .diff-add[
 ```scala
-trait FlatMap[F[_]] `extends Apply[F]`:
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A, B](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A]=> F[B] =
+*     `fa => ff.flatMap(f => fa.map(f))`
+```
+]
+
+---
+
+## Generalisation
+
+.diff-rm[
+```scala
+*trait FlatMap[F[_]] extends `Functor[F]`:
+  extension [A, B](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A]=> F[B] =
+      fa => ff.flatMap(f => fa.map(f))
+```
+]
+
+---
+
+## Generalisation
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends `Apply[F]`:
   extension [A, B](ffa: F[F[A]])
     def flatten: F[A]
 
@@ -4483,7 +4613,40 @@ case class Review(
 ## Problem
 
 ```scala
-def `reviews`[F[_]](
+val `gamestopReview` = Review(
+  id   = ps5Seller.reviews.head,
+  body = "This is a massive scam"
+)
+```
+
+---
+
+## Problem
+
+```scala
+val gamestopReview = Review(
+  `id   = ps5Seller.reviews.head`,
+  body = "This is a massive scam"
+)
+```
+
+---
+
+## Problem
+
+```scala
+val gamestopReview = Review(
+  id   = ps5Seller.reviews.head,
+  `body = "This is a massive scam"`
+)
+```
+
+---
+
+## Problem
+
+```scala
+def `sellerReviews`[F[_]](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4495,7 +4658,7 @@ def `reviews`[F[_]](
 ## Problem
 
 ```scala
-def reviews[`F[_]`](
+def sellerReviews[`F[_]`](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4507,7 +4670,7 @@ def reviews[`F[_]`](
 ## Problem
 
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   `fseller   : F[Seller]`,
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4519,7 +4682,7 @@ def reviews[F[_]](
 ## Problem
 
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   fseller   : F[Seller],
   `loadReview: ReviewId => F[Review]`
 ): F[List[Review]] =
@@ -4531,7 +4694,7 @@ def reviews[F[_]](
 ## Problem
 
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): `F[List[Review]]` =
@@ -4543,7 +4706,7 @@ def reviews[F[_]](
 ## Problem
 
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4742,7 +4905,7 @@ given Functor[List] with
 
 .diff-rm[
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4762,7 +4925,7 @@ def reviews[F[_]](
 
 .diff-add[
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4786,6 +4949,21 @@ def reviews[F[_]](
 
 ## Solution
 
+.diff-add[
+```scala
+def sellerReviews[F[_]](
+  fseller   : F[Seller],
+  loadReview: ReviewId => F[Review]
+): F[List[Review]] =
+  val reviews  = (seller: Seller) => seller.reviews
+* `val composed = reviews andThen loadReview.lift`
+```
+]
+
+---
+
+## Solution
+
 .center[![Item contexts](img/monad-seller-loadReview-flip-hl.svg)]
 
 ---
@@ -4794,12 +4972,12 @@ def reviews[F[_]](
 
 .diff-add[
 ```scala
-def reviews[F[_]](
+def sellerReviews[F[_]](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
   val reviews  = (seller: Seller) => seller.reviews
-* `val composed = reviews andThen loadReview.lift andThen flip`
+* val composed = reviews andThen loadReview.lift `andThen flip`
 ```
 ]
 
@@ -4809,7 +4987,7 @@ def reviews[F[_]](
 
 .diff-add[
 ```scala
-*def reviews[F[_]`: Applicative`](
+*def sellerReviews[F[_]`: Applicative`](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4830,7 +5008,7 @@ def reviews[F[_]](
 
 .diff-add[
 ```scala
-def reviews[F[_]: Applicative](
+def sellerReviews[F[_]: Applicative](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4847,7 +5025,7 @@ def reviews[F[_]: Applicative](
 
 .diff-add[
 ```scala
-*def reviews[F[_]: Applicative`: FlatMap`](
+*def sellerReviews[F[_]: Applicative`: FlatMap`](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4864,7 +5042,7 @@ def reviews[F[_]: Applicative](
 
 .diff-rm[
 ```scala
-def reviews[F[_]: Applicative: FlatMap](
+def sellerReviews[F[_]: Applicative: FlatMap](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4881,7 +5059,7 @@ def reviews[F[_]: Applicative: FlatMap](
 
 .diff-add[
 ```scala
-def reviews[F[_]: Applicative: FlatMap](
+def sellerReviews[F[_]: Applicative: FlatMap](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4898,7 +5076,7 @@ def reviews[F[_]: Applicative: FlatMap](
 
 .diff-rm[
 ```scala
-def reviews[F[_]: Applicative: FlatMap](
+def sellerReviews[F[_]: Applicative: FlatMap](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4915,7 +5093,7 @@ def reviews[F[_]: Applicative: FlatMap](
 
 .diff-add[
 ```scala
-def reviews[F[_]: Applicative: FlatMap](
+def sellerReviews[F[_]: Applicative: FlatMap](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4930,7 +5108,7 @@ def reviews[F[_]: Applicative: FlatMap](
 ## Solution
 
 ```scala
-def reviews[F[_]`: Applicative: FlatMap`](
+def sellerReviews[F[_]`: Applicative: FlatMap`](
   fseller   : F[Seller],
   loadReview: ReviewId => F[Review]
 ): F[List[Review]] =
@@ -4957,7 +5135,7 @@ trait Monad[F[_]] extends `FlatMap[F] with Applicative[F]`
 
 ---
 
-## Demonstration
+## Verification
 
 .diff-rm[
 ```scala
@@ -4976,7 +5154,7 @@ trait Monad[F[_]] extends `FlatMap[F] with Applicative[F]`
 
 ---
 
-## Demonstration
+## Verification
 
 .diff-add[
 ```scala
@@ -4995,7 +5173,7 @@ trait Monad[F[_]] extends `FlatMap[F] with Applicative[F]`
 
 ---
 
-## Demonstration
+## Verification
 
 .diff-add[
 ```scala
@@ -5004,81 +5182,22 @@ given Monad[Option] with
     def lift: Option[A] => Option[B] =
       case Some(a) => Some(f(a))
       case None    => None
-*
-* `extension [A](a: A)`
-*   `def pure: Option[A] = Some(a)`
 
   extension [A, B](ffa: Option[Option[A]])
     def flatten: Option[A] = ffa match
       case Some(oa) => oa
       case None     => None
+*
+* `extension [A](a: A)`
+*   `def pure: Option[A] = Some(a)`
 ```
 ]
 
 ---
 
-## Demonstration
+## Verification
 
 ```scala
-val gamestopReview = `Review`(
-  id   = ps5Seller.reviews.head,
-  body = "This is a massive scam"
-)
-
-val knownReviews = Map(
-  gamestopReview.id -> gamestopReview
-)
-
-def loadReview(id: ReviewId): Option[Review] =
-  knownReviews.get(id)
-```
-
----
-
-## Demonstration
-
-```scala
-val gamestopReview = Review(
-  `id   = ps5Seller.reviews.head`,
-  body = "This is a massive scam"
-)
-
-val knownReviews = Map(
-  gamestopReview.id -> gamestopReview
-)
-
-def loadReview(id: ReviewId): Option[Review] =
-  knownReviews.get(id)
-```
-
----
-
-## Demonstration
-
-```scala
-val gamestopReview = Review(
-  id   = ps5Seller.reviews.head,
-  `body = "This is a massive scam"`
-)
-
-val knownReviews = Map(
-  gamestopReview.id -> gamestopReview
-)
-
-def loadReview(id: ReviewId): Option[Review] =
-  knownReviews.get(id)
-```
-
----
-
-## Demonstration
-
-```scala
-val gamestopReview = Review(
-  id   = ps5Seller.reviews.head,
-  body = "This is a massive scam"
-)
-
 val knownReviews = Map(
   gamestopReview.id -> gamestopReview
 )
@@ -5089,14 +5208,9 @@ def `loadReview`(id: ReviewId): Option[Review] =
 
 ---
 
-## Demonstration
+## Verification
 
 ```scala
-val gamestopReview = Review(
-  id   = ps5Seller.reviews.head,
-  body = "This is a massive scam"
-)
-
 val knownReviews = Map(
   gamestopReview.id -> gamestopReview
 )
@@ -5107,14 +5221,9 @@ def loadReview(`id: ReviewId`): Option[Review] =
 
 ---
 
-## Demonstration
+## Verification
 
 ```scala
-val gamestopReview = Review(
-  id   = ps5Seller.reviews.head,
-  body = "This is a massive scam"
-)
-
 val knownReviews = Map(
   gamestopReview.id -> gamestopReview
 )
@@ -5125,14 +5234,9 @@ def loadReview(id: ReviewId): `Option[Review]` =
 
 ---
 
-## Demonstration
+## Verification
 
 ```scala
-val gamestopReview = Review(
-  id   = ps5Seller.reviews.head,
-  body = "This is a massive scam"
-)
-
 val knownReviews = Map(
   gamestopReview.id -> gamestopReview
 )
@@ -5143,19 +5247,28 @@ def loadReview(id: ReviewId): Option[Review] =
 
 ---
 
-## Demonstration
+## Verification
 
 ```scala
-reviews(Option(ps5Seller), loadReview)
+&#x200B;`sellerReviews`(Option(ps5Seller), loadReview)
   .map(_.map(_.body))
 ```
 
 ---
 
-## Demonstration
+## Verification
 
 ```scala
-reviews(Option(ps5Seller), loadReview)
+sellerReviews(`Option(ps5Seller)`, loadReview)
+  .map(_.map(_.body))
+```
+
+---
+
+## Verification
+
+```scala
+sellerReviews(Option(ps5Seller), loadReview)
   .map(_.map(_.body))
 // val res4: Option[List[String]] = Some(List(This is a massive scam))
 ```
