@@ -23,18 +23,7 @@
 </g>
 <!-- Goal -->
 <!-- FFSeller -->
-<g id="node4" class="node disabled">
-<title>FFSeller</title>
-<path fill="#ffffff" stroke="#d0dce3" d="M323.6,-108C323.6,-108 256.6,-108 256.6,-108 250.6,-108 244.6,-102 244.6,-96 244.6,-96 244.6,-84 244.6,-84 244.6,-78 250.6,-72 256.6,-72 256.6,-72 323.6,-72 323.6,-72 329.6,-72 335.6,-78 335.6,-84 335.6,-84 335.6,-96 335.6,-96 335.6,-102 329.6,-108 323.6,-108"/>
-<text text-anchor="middle" x="290.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">F[F[Seller]]</text>
-</g>
 <!-- FItem&#45;&gt;FFSeller -->
-<g id="edge5" class="edge disabled">
-<title>FItem&#45;&gt;FFSeller</title>
-<path fill="none" stroke="#d0dce3" d="M105.82,-90C139.64,-90 193.8,-90 234.49,-90"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="234.53,-93.5 244.53,-90 234.53,-86.5 234.53,-93.5"/>
-<text text-anchor="middle" x="175.1" y="-93.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">itemSeller.lift</text>
-</g>
 <!-- FSeller -->
 <g id="node5" class="node goal">
 <title>FSeller</title>
@@ -42,12 +31,6 @@
 <text text-anchor="middle" x="290.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">F[Seller]</text>
 </g>
 <!-- FItem&#45;&gt;FSeller -->
-<g id="edge4" class="edge disabled">
-<title>FItem&#45;&gt;FSeller</title>
-<path fill="none" stroke="#d0dce3" d="M105.82,-79.38C142.48,-67.1 203.06,-46.81 244.46,-32.95"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="245.66,-36.24 254.03,-29.74 243.44,-29.6 245.66,-36.24"/>
-<text text-anchor="middle" x="175.1" y="-76.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">itemSeller.lift⨾flatten</text>
-</g>
 <!-- Item -->
 <g id="node6" class="node">
 <title>Item</title>
@@ -55,26 +38,8 @@
 <text text-anchor="middle" x="73.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">Item</text>
 </g>
 <!-- FItem&#45;&gt;Item -->
-<g id="edge1" class="edge lift">
-<title>FItem&#45;&gt;Item</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="5,2" d="M73.1,-61.58C73.1,-53.03 73.1,-43.87 73.1,-36.17"/>
-<polygon fill="#586e75" stroke="#586e75" points="69.6,-61.59 73.1,-71.59 76.6,-61.59 69.6,-61.59"/>
-<text text-anchor="middle" x="64.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">lift</text>
-</g>
 <!-- FFSeller&#45;&gt;FSeller -->
-<g id="edge2" class="edge lift">
-<title>FFSeller&#45;&gt;FSeller</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="5,2" d="M315.4,-63.04C318.76,-54.12 317.14,-45.2 310.56,-36.28"/>
-<polygon fill="#586e75" stroke="#586e75" points="312.23,-61.52 310.38,-71.95 318.34,-64.95 312.23,-61.52"/>
-<text text-anchor="middle" x="310.6" y="-45.04" font-family="Inter,Arial" font-size="11.00" fill="#586e75">lift</text>
-</g>
 <!-- FFSeller&#45;&gt;FSeller -->
-<g id="edge6" class="edge disabled">
-<title>FFSeller&#45;&gt;FSeller</title>
-<path fill="none" stroke="#d0dce3" d="M269.82,-71.95C263.14,-63.04 261.44,-54.12 264.71,-45.2"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="267.87,-46.73 269.64,-36.28 261.74,-43.34 267.87,-46.73"/>
-<text text-anchor="middle" x="246.1" y="-45.6" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">flatten</text>
-</g>
 <!-- FSeller&#45;&gt;Goal -->
 <g id="edge8" class="edge goal">
 <title>FSeller&#45;&gt;Goal</title>

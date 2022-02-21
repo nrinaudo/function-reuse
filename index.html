@@ -504,31 +504,9 @@ def affordableF[F[_]](
 def affordableF[F[_]](
   fi: F[Item]
 ): F[Boolean] =
-* `affordable.lift.apply(fi)`
+* `affordable.lift`
 ```
 ]
-
----
-
-## Solution
-
-```scala
-def affordableF[F[_]](
-  fi: F[Item]
-): F[Boolean] =
-  `affordable.lift`.apply(fi)
-```
-
----
-
-## Solution
-
-```scala
-def affordableF[F[_]](
-  fi: F[Item]
-): F[Boolean] =
-  affordable.lift.`apply(fi)`
-```
 
 ---
 
@@ -538,7 +516,7 @@ def affordableF[F[_]](
 def affordableF[`F[_]`](
   fi: F[Item]
 ): F[Boolean] =
-  affordable.lift.apply(fi)
+  affordable.lift
 ```
 
 ---
@@ -550,7 +528,21 @@ def affordableF[`F[_]`](
 *def affordableF[F[_]`: Lift`](
   fi: F[Item]
 ): F[Boolean] =
-  affordable.lift.apply(fi)
+  affordable.lift
+```
+]
+
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def affordableF[F[_]: Lift](
+  fi: F[Item]
+): F[Boolean] =
+  affordable.lift`.apply(fi)`
 ```
 ]
 
@@ -641,7 +633,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 *
 * `extension [A](fa: F[A])`
-*   `def map[B](f: A => B): F[B] = f.lift(fa)`
+*   `def map[B](f: A => B): F[B] = f.lift.apply(fa)`
 ```
 ]
 
@@ -655,7 +647,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 
   extension [A](fa: F[A])
-    def `map`[B](f: A => B): F[B] = f.lift(fa)
+    def `map`[B](f: A => B): F[B] = f.lift.apply(fa)
 ```
 
 ---
@@ -668,7 +660,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 
   extension [A](`fa: F[A]`)
-    def map[B](f: A => B): F[B] = f.lift(fa)
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
 ```
 
 ---
@@ -681,7 +673,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 
   extension [A](fa: F[A])
-    def map[B](`f: A => B`): F[B] = f.lift(fa)
+    def map[B](`f: A => B`): F[B] = f.lift.apply(fa)
 ```
 
 ---
@@ -694,7 +686,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 
   extension [A](fa: F[A])
-    def map[B](f: A => B): F[B] = `f.lift(fa)`
+    def map[B](f: A => B): F[B] = `f.lift.apply(fa)`
 ```
 
 ---
@@ -1032,214 +1024,6 @@ def cheapestF[F[_]: Functor](
 
 ## Intuition
 
-```scala
-def `curry`[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](`f: (A, B) => C`): A => (B => C) =
-  a => b => f(a, b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): `A => (B => C)` =
-  a => b => f(a, b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  `a` => b => f(a, b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => `b` => f(a, b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => `f(a, b)`
-```
-
----
-
-## Intuition
-
-.diff-add[
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-*
-*&#x200B;`def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =`
-* `(a, b) => val f2 = f(a)`
-*           `f2(b)`
-```
-]
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-
-def `uncurry`[A, B, C](f: A => (B => C)): (A, B) => C =
-  (a, b) => val f2 = f(a)
-            f2(b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](`f: A => (B => C)`): (A, B) => C =
-  (a, b) => val f2 = f(a)
-            f2(b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](f: A => (B => C)): `(A, B) => C` =
-  (a, b) => val f2 = f(a)
-            f2(b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
-  `(a, b)` => val f2 = f(a)
-            f2(b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
-  (a, b) => val `f2 = f(a)`
-            f2(b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
-  (a, b) => val f2 = f(a)
-            `f2(b)`
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: `(A, B) => C)`: A => (B => C) =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](f: A => (B => C)): `(A, B) => C` =
-  (a, b) => val f2 = f(a)
-            f2(b)
-```
-
----
-
-## Intuition
-
-```scala
-def curry[A, B, C](f: (A, B) => C): `A => (B => C)` =
-  a => b => f(a, b)
-
-def uncurry[A, B, C](f: `A => (B => C)`): (A, B) => C =
-  (a, b) => val f2 = f(a)
-            f2(b)
-```
-
----
-
-## Intuition
-
-.diff-rm[
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-* `a => b => f(a, b)`
-
-def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
-* `(a, b) => val f2 = f(a)`
-*           `f2(b)`
-```
-]
-
----
-
-## Intuition
-
-.diff-add[
-```scala
-def curry[A, B, C](f: (A, B) => C): A => (B => C) =
-* `f.curried`
-
-def uncurry[A, B, C](f: A => (B => C)): (A, B) => C =
-* `Function.uncurry(f)`
-```
-]
-
----
-
-## Intuition
-
-.center[![Ap](img/ap-before-curried.svg)]
-
----
-
-## Intuition
-
 .center[![Ap](img/ap-curried.svg)]
 
 ---
@@ -1558,6 +1342,32 @@ trait Split[F[_]] extends Functor[F]:
 *     `)`
 ```
 ]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+*
+* `extension [A, B, C, D](f: (A, B, C) => D)`
+*   `def lift3: (F[A], F[B], F[C]) => F[D] =`
+*     `???`
+```
+]
+
+--
+
+Let me know what you came up with at [@NicolasRinaudo](https://twitter.com/NicolasRinaudo)!
 
 ---
 
@@ -2830,10 +2640,9 @@ case class Seller(
 ## Problem
 
 ```scala
-def `productSeller`[F[_]](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
+def `itemSeller`(
+  item: Item
+): Seller =
   ???
 ```
 
@@ -2842,10 +2651,9 @@ def `productSeller`[F[_]](
 ## Problem
 
 ```scala
-def productSeller[`F[_]`](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
+def itemSeller(
+  `item: Item`
+): Seller =
   ???
 ```
 
@@ -2854,10 +2662,9 @@ def productSeller[`F[_]`](
 ## Problem
 
 ```scala
-def productSeller[F[_]](
-  `fi        : F[Item]`,
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
+def itemSeller(
+  item: Item
+): `Seller` =
   ???
 ```
 
@@ -2866,24 +2673,81 @@ def productSeller[F[_]](
 ## Problem
 
 ```scala
-def productSeller[F[_]](
-  fi        : F[Item],
-  `loadSeller: SellerId => F[Seller]`
-): F[Seller] =
-  ???
+def itemSeller(
+  item: Item
+): Seller =
+  `???`
 ```
 
 ---
 
 ## Problem
 
+.center[![Item Seller](img/itemSeller-start.svg)]
+
+---
+
+## Problem
+
+.center[![Item Seller](img/itemSeller-goal.svg)]
+
+---
+
+## Problem
+
+.center[![Item Seller](img/itemSeller-sellerId.svg)]
+
+---
+
+## Problem
+
+.center[![Item Seller](img/itemSeller-nope.svg)]
+
+---
+
+## Problem
+
+.center[![Item Seller](img/itemSeller-loadSeller.svg)]
+
+---
+
+## Problem
+
+.center[![Item Seller](img/itemSeller-loadSeller-2.svg)]
+
+---
+
+## Problem
+
+.center[![Item Seller](img/itemSeller.svg)]
+
+---
+
+## Problem
+
+.diff-add[
 ```scala
-def productSeller[F[_]](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): `F[Seller]` =
+def itemSeller(
+* `loadSeller: SellerId => F[Seller],`
+  item      : Item
+): Seller =
   ???
 ```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+*def itemSeller[`F[_]`](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): Seller =
+  ???
+```
+]
 
 ---
 
@@ -2891,9 +2755,37 @@ def productSeller[F[_]](
 
 .diff-rm[
 ```scala
-def productSeller[F[_]](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+*): `Seller` =
+  ???
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+*): `F[Seller]` =
+  ???
+```
+]
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
 ): F[Seller] =
 * `???`
 ```
@@ -2905,11 +2797,85 @@ def productSeller[F[_]](
 
 .diff-add[
 ```scala
-def productSeller[F[_]](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
 ): F[Seller] =
-* `fi.map(loadSeller)`
+* `loadSeller(item.sellerId)`
+```
+]
+
+---
+
+## Problem
+
+```scala
+def `itemSellerF`[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[`F[_]`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[F[_]](
+  `itemSeller: Item => F[Seller]`,
+  fitem     : F[Item]
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  `fitem     : F[Item]`
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): `F[Seller]` =
+  ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `???`
 ```
 ]
 
@@ -2919,11 +2885,25 @@ def productSeller[F[_]](
 
 .diff-add[
 ```scala
-*def productSeller[F[_]`: Functor`](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  fi.map(loadSeller)
+* `fitem.map(itemSeller)`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+*def itemSellerF[F[_]`: Functor`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  fitem.map(itemSeller)
 ```
 ]
 
@@ -2932,17 +2912,17 @@ def productSeller[F[_]](
 ## Problem
 
 ```scala
-def productSeller[F[_]: Functor](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  fi.map(loadSeller)
-//   fi.map(loadSeller)
-//          ^
-// ⛔ Found:    (loadSeller : SellerId => F[Seller])
+  fitem.map(itemSeller)
+//   fitem.map(itemSeller)
+//             ^
+// ⛔ Found:    (itemSeller : Item => F[Seller])
 //   Required: Item => Seller
 //   
-//   where:    F is a type in method productSeller with bounds <: [_] =>> Any
+//   where:    F is a type in method itemSellerF with bounds <: [_] =>> Any
 ```
 
 ---
@@ -2961,13 +2941,7 @@ def productSeller[F[_]: Functor](
 
 ## Intuition
 
-.center[![FlatMap](img/flatMap-sellerId.svg)]
-
----
-
-## Intuition
-
-.center[![FlatMap](img/flatMap-loadSeller.svg)]
+.center[![FlatMap](img/flatMap-itemSeller.svg)]
 
 ---
 
@@ -3119,52 +3093,11 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-rm[
 ```scala
-def productSeller[F[_]: Functor](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-* `fi.map(loadSeller)`
-```
-]
-
----
-
-## Solution
-
-.center[![FlatMap](img/flatMap-sellerId-hl.svg)]
-
----
-
-## Solution
-
-.diff-add[
-```scala
-def productSeller[F[_]: Functor](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
-* `val sellerId = (item: Item) => item.sellerId`
-```
-]
-
----
-
-## Solution
-
-.center[![FlatMap](img/flatMap-sellerId-loadSeller-hl.svg)]
-
----
-
-## Solution
-
-.diff-add[
-```scala
-def productSeller[F[_]: Functor](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-* val `seller   = (sellerId andThen loadSeller)`
+* `fitem.map(itemSeller)`
 ```
 ]
 
@@ -3180,12 +3113,11 @@ def productSeller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def productSeller[F[_]: Functor](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-* val seller   = (sellerId andThen loadSeller)`.lift`
+* `itemSeller.lift`
 ```
 ]
 
@@ -3193,7 +3125,7 @@ def productSeller[F[_]: Functor](
 
 ## Solution
 
-.center[![FlatMap](img/flatMap-complicated-hl.svg)]
+.center[![FlatMap](img/flatMap-flatten-hl-2.svg)]
 
 ---
 
@@ -3201,13 +3133,11 @@ def productSeller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def productSeller[F[_]: Functor](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-* val seller   = (sellerId andThen loadSeller).lift `andThen`
-*                `(_.flatten)`
+* itemSeller.lift` andThen (_.flatten)`
 ```
 ]
 
@@ -3217,13 +3147,11 @@ def productSeller[F[_]: Functor](
 
 .diff-rm[
 ```scala
-*def productSeller[F[_]: `Functor`](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+*def itemSellerF[F[_]: `Functor`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-  val seller   = (sellerId andThen loadSeller).lift andThen
-                 (_.flatten)
+  itemSeller.lift andThen (_.flatten)
 ```
 ]
 
@@ -3233,13 +3161,11 @@ def productSeller[F[_]: Functor](
 
 .diff-add[
 ```scala
-*def productSeller[F[_]: `Flatten`](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+*def itemSellerF[F[_]: `Flatten`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-  val seller   = (sellerId andThen loadSeller).lift andThen
-                 (_.flatten)
+  itemSeller.lift andThen (_.flatten)
 ```
 ]
 
@@ -3249,15 +3175,11 @@ def productSeller[F[_]: Functor](
 
 .diff-add[
 ```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-  val seller   = (sellerId andThen loadSeller).lift andThen
-                 (_.flatten)
-
-* `seller(fi)`
+* `(`itemSeller.lift andThen (_.flatten)`).apply(fitem)`
 ```
 ]
 
@@ -3265,7 +3187,7 @@ def productSeller[F[_]: Flatten](
 
 ## Common combinators
 
-.center[![FlatMap](img/flatMap-lift-flatten-hl.svg)]
+.center[![FlatMap](img/flatMap-flatten-hl-2.svg)]
 
 ---
 
@@ -3343,7 +3265,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ## Common combinators
 
-.center[![FlatMap](img/flatMap-lift-flatten-hl.svg)]
+.center[![FlatMap](img/flatMap-flatten-hl-2.svg)]
 
 ---
 
@@ -3355,17 +3277,19 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ## Common combinators
 
+.center[![FlatMap](img/flatMap-flatMap-full.svg)]
+
+---
+
+## Common combinators
+
 .diff-rm[
 ```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-* val seller   = (sellerId andThen loadSeller)`.lift andThen`
-*                `(_.flatten)`
-
-  seller(fi)
+* `(`itemSeller.`lift andThen (_.flatten))`.apply(fitem)
 ```
 ]
 
@@ -3375,14 +3299,11 @@ def productSeller[F[_]: Flatten](
 
 .diff-add[
 ```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-* val seller   = (sellerId andThen loadSeller)`.liftFlat`
-
-  seller(fi)
+* itemSeller.`liftFlat`.apply(fitem)
 ```
 ]
 
@@ -3392,14 +3313,11 @@ def productSeller[F[_]: Flatten](
 
 .diff-rm[
 ```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-* `val seller   = (sellerId andThen loadSeller).liftFlat`
-*
-* `seller(fi)`
+* `itemSeller.liftFlat.apply(fitem)`
 ```
 ]
 
@@ -3409,45 +3327,11 @@ def productSeller[F[_]: Flatten](
 
 .diff-add[
 ```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-*
-* `(sellerId andThen loadSeller).liftFlat.apply(fi)`
-```
-]
-
----
-
-## Common combinators
-
-.diff-rm[
-```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-
-* `(sellerId andThen loadSeller).liftFlat.apply(fi)`
-```
-]
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-def productSeller[F[_]: Flatten](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
-): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-
-* `fi.flatMap((sellerId andThen loadSeller)`
+* `fitem.flatMap(itemSeller)`
 ```
 ]
 
@@ -3625,13 +3509,11 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-rm[
 ```scala
-*def productSeller[F[_]: `Flatten`](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+*def itemSellerF[F[_]: `Flatten`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-
-  fi.flatMap(sellerId andThen loadSeller)
+  fitem.flatMap(itemSeller)
 ```
 ]
 
@@ -3641,13 +3523,11 @@ trait Flatten[F[_]] extends Functor[F]:
 
 .diff-add[
 ```scala
-*def productSeller[F[_]: `FlatMap`](
-  fi        : F[Item],
-  loadSeller: SellerId => F[Seller]
+*def itemSellerF[F[_]: `FlatMap`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
 ): F[Seller] =
-  val sellerId = (item: Item) => item.sellerId
-
-  fi.flatMap(sellerId andThen loadSeller)
+  fitem.flatMap(itemSeller)
 ```
 ]
 
@@ -3657,7 +3537,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 --
 
-* `FlatMap` is about working with values in multiple layers of some `F`.
+* `FlatMap` is about working with functions whose return value is in some `F`.
 
 --
 
@@ -4212,7 +4092,7 @@ trait Monad[F[_]] extends `FlatMap[F] with Applicative[F]`
 ---
 class: center, middle
 
-# Scammy products
+# Scammy items
 
 ---
 
@@ -4256,9 +4136,7 @@ def scammyReviews(reviews: List[Review]): Boolean =
 
 .center[![Item contexts](img/scammy.svg)]
 
----
-
-## Solution
+--
 
 Let me know what you came up with at [@NicolasRinaudo](https://twitter.com/NicolasRinaudo)!
 
@@ -4287,7 +4165,7 @@ name: closing
 
 --
 
-* `FlatMap` is about working with values in multiple layers of some `F`.
+* `FlatMap` is about working with functions whose return value is in some `F`.
 
 --
 
