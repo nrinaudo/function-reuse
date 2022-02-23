@@ -633,7 +633,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 *
 * `extension [A](fa: F[A])`
-*   `def map[B](f: A => B): F[B] = f.lift.apply(fa)`
+*   `def map[B](f: A => B): F[B] = ???`
 ```
 ]
 
@@ -647,7 +647,7 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 
   extension [A](fa: F[A])
-    def `map`[B](f: A => B): F[B] = f.lift.apply(fa)
+    def `map`[B](f: A => B): F[B] = ???
 ```
 
 ---
@@ -660,6 +660,78 @@ trait Functor[F[_]]:
     def lift: F[A] => F[B]
 
   extension [A](`fa: F[A]`)
+    def map[B](f: A => B): F[B] = ???
+```
+
+---
+
+## Common combinators
+
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](`f: A => B`): F[B] = ???
+```
+
+---
+
+## Common combinators
+
+.diff-rm[
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+*   def map[B](f: A => B): F[B] = `???`
+```
+]
+
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+*   def map[B](f: A => B): F[B] = `f.lift`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+*   def map[B](f: A => B): F[B] = f.lift`.apply(fa)`
+```
+]
+
+---
+
+## Common combinators
+
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def `lift`: F[A] => F[B]
+
+  extension [A](fa: F[A])
     def map[B](f: A => B): F[B] = f.lift.apply(fa)
 ```
 
@@ -670,24 +742,41 @@ trait Functor[F[_]]:
 ```scala
 trait Functor[F[_]]:
   extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
+    def lift: `F[A] => F[B]`
 
   extension [A](fa: F[A])
-    def map[B](`f: A => B`): F[B] = f.lift.apply(fa)
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
 ```
 
 ---
 
 ## Common combinators
 
+.diff-add[
 ```scala
 trait Functor[F[_]]:
   extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
+*   def lift: F[A] => F[B]` = fa =>`
 
   extension [A](fa: F[A])
-    def map[B](f: A => B): F[B] = `f.lift.apply(fa)`
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
 ```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+*   def lift: F[A] => F[B] = fa => `fa.map(f)`
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
+```
+]
 
 ---
 
@@ -1573,6 +1662,19 @@ def cheapestF[F[_]: Apply](
 
 ## Common combinators
 
+```scala
+def cheapestF[F[_]: Apply](
+  fi1: F[Item],
+  fi2: F[Item]
+): F[Item] =
+  `(fi1, fi2)`.map2(cheapest)
+```
+
+
+---
+
+## Common combinators
+
 .diff-add[
 ```scala
 trait Apply[F[_]] extends Functor[F]:
@@ -1648,6 +1750,26 @@ trait Apply[F[_]] extends Functor[F]:
 
   extension [A, B, C](fab: (F[A], F[B]))
     def map2(`f: (A, B) => C`): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+
+---
+
+## Common combinators
+
+```scala
+trait Apply[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.ap)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): `F[C]` =
       f.lift2.apply(fab._1, fab._2)
 ```
 
@@ -2681,49 +2803,49 @@ def itemSeller(
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller-start.svg)]
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller-goal.svg)]
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller-sellerId.svg)]
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller-nope.svg)]
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller-loadSeller.svg)]
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller-loadSeller-2.svg)]
 
 ---
 
-## Problem
+## Intuition
 
 .center[![Item Seller](img/itemSeller.svg)]
 
 ---
 
-## Problem
+## Solution
 
 .diff-add[
 ```scala
@@ -2737,7 +2859,7 @@ def itemSeller(
 
 ---
 
-## Problem
+## Solution
 
 .diff-add[
 ```scala
@@ -2751,7 +2873,7 @@ def itemSeller(
 
 ---
 
-## Problem
+## Solution
 
 .diff-rm[
 ```scala
@@ -2765,7 +2887,7 @@ def itemSeller[F[_]](
 
 ---
 
-## Problem
+## Solution
 
 .diff-add[
 ```scala
@@ -2779,7 +2901,7 @@ def itemSeller[F[_]](
 
 ---
 
-## Problem
+## Solution
 
 .diff-rm[
 ```scala
@@ -2793,7 +2915,7 @@ def itemSeller[F[_]](
 
 ---
 
-## Problem
+## Solution
 
 .diff-add[
 ```scala
@@ -3537,7 +3659,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 --
 
-* `FlatMap` is about working with functions whose return value is in some `F`.
+* `FlatMap` is about working with functions that return values in some `F`.
 
 --
 
@@ -3590,10 +3712,9 @@ case class Review(
 ## Problem
 
 ```scala
-def `sellerReviews`[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
-): F[List[Review]] =
+def `sellerReviews`(
+  seller: Seller
+): List[Review] =
   ???
 ```
 
@@ -3602,10 +3723,9 @@ def `sellerReviews`[F[_]](
 ## Problem
 
 ```scala
-def sellerReviews[`F[_]`](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
-): F[List[Review]] =
+def sellerReviews(
+  `seller: Seller`
+): List[Review] =
   ???
 ```
 
@@ -3614,10 +3734,9 @@ def sellerReviews[`F[_]`](
 ## Problem
 
 ```scala
-def sellerReviews[F[_]](
-  `fseller   : F[Seller]`,
-  loadReview: ReviewId => F[Review]
-): F[List[Review]] =
+def sellerReviews(
+  seller: Seller
+): `List[Review]` =
   ???
 ```
 
@@ -3626,34 +3745,9 @@ def sellerReviews[F[_]](
 ## Problem
 
 ```scala
-def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  `loadReview: ReviewId => F[Review]`
-): F[List[Review]] =
-  ???
-```
-
----
-
-## Problem
-
-```scala
-def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
-): `F[List[Review]]` =
-  ???
-```
-
----
-
-## Problem
-
-```scala
-def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
-): F[List[Review]] =
+def sellerReviews(
+  seller: Seller
+): List[Review] =
   `???`
 ```
 
@@ -3661,73 +3755,74 @@ def sellerReviews[F[_]](
 
 ## Intuition
 
-.center[![Item contexts](img/monad-start.svg)]
+.center[![Item contexts](img/sellerReviews-start.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-goal.svg)]
+.center[![Item contexts](img/sellerReviews-goal.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-reviews.svg)]
+.center[![Item contexts](img/sellerReviews-reviews.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-loadReview.svg)]
+.center[![Item contexts](img/sellerReviews-nope.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-before.svg)]
+.center[![Item contexts](img/sellerReviews-loadReview.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-before-lift.svg)]
+.center[![Item contexts](img/sellerReviews-before.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-lift-required.svg)]
+.center[![Item contexts](img/sellerReviews-lift.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-before-flip.svg)]
+.center[![Item contexts](img/sellerReviews-lifted.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-flip.svg)]
+.center[![Item contexts](img/sellerReviews-nope-2.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-before-flatMap-required.svg)]
+.center[![Item contexts](img/sellerReviews-flip.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-flatMap-required.svg)]
+.center[![Item contexts](img/sellerReviews-flipped.svg)]
 
 ---
 
 ## Intuition
 
-.center[![Item contexts](img/monad-full-required.svg)]
+.center[![Item contexts](img/sellerReviews-required.svg)]
+
 
 ---
 
@@ -3829,19 +3924,67 @@ given Functor[List] with
 
 ## Solution
 
-.center[![Item contexts](img/monad-lift-required-hl.svg)]
+.center[![Item contexts](img/sellerReviews-required.svg)]
+
 
 ---
 
 ## Solution
 
-.center[![Item contexts](img/monad-lift-hl.svg)]
+.center[![Item contexts](img/sellerReviews.svg)]
 
 ---
 
 ## Solution
 
-.center[![Item contexts](img/monad-flatMap.svg)]
+```scala
+def sellerReviews(
+  seller: Seller
+): List[Review] =
+  ???
+```
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-loadReview-hl.svg)]
+
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviews(
+* `loadReview: ReviewId => F[Review],`
+  seller: Seller
+): List[Review] =
+  ???
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def sellerReviews[`F[_]`](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): List[Review] =
+  ???
+```
+]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-flistreview.svg)]
+
 
 ---
 
@@ -3850,8 +3993,43 @@ given Functor[List] with
 .diff-rm[
 ```scala
 def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+*): `List[Review]` =
+  ???
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+*): `F[List[Review]]` =
+  ???
+```
+]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-reviews-hl.svg)]
+
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
 ): F[List[Review]] =
 * `???`
 ```
@@ -3861,19 +4039,13 @@ def sellerReviews[F[_]](
 
 ## Solution
 
-.center[![Item contexts](img/monad-reviews-hl.svg)]
-
----
-
-## Solution
-
 .diff-add[
 ```scala
 def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+  loadReview: ReviewId => F[Review],
+  seller: Seller
 ): F[List[Review]] =
-* `val reviews  = (seller: Seller) => seller.reviews`
+* `seller.reviews`
 ```
 ]
 
@@ -3881,13 +4053,7 @@ def sellerReviews[F[_]](
 
 ## Solution
 
-.center[![Item contexts](img/monad-lift-hl.svg)]
-
----
-
-## Solution
-
-.center[![Item contexts](img/monad-seller-loadReview-hl.svg)]
+.center[![Item contexts](img/sellerReviews-loadReview-lifted-hl.svg)]
 
 ---
 
@@ -3896,11 +4062,10 @@ def sellerReviews[F[_]](
 .diff-add[
 ```scala
 def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+  loadReview: ReviewId => F[Review],
+  seller: Seller
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-* `val composed = reviews andThen loadReview.lift`
+* seller.reviews`.map(loadReview)`
 ```
 ]
 
@@ -3908,7 +4073,7 @@ def sellerReviews[F[_]](
 
 ## Solution
 
-.center[![Item contexts](img/monad-seller-loadReview-flip-hl.svg)]
+.center[![Item contexts](img/sellerReviews-flip-hl.svg)]
 
 ---
 
@@ -3917,11 +4082,10 @@ def sellerReviews[F[_]](
 .diff-add[
 ```scala
 def sellerReviews[F[_]](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+  loadReview: ReviewId => F[Review],
+  seller: Seller
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-* val composed = reviews andThen loadReview.lift `andThen flip`
+* `flip`(seller.reviews.map(loadReview)`)`
 ```
 ]
 
@@ -3932,11 +4096,134 @@ def sellerReviews[F[_]](
 .diff-add[
 ```scala
 *def sellerReviews[F[_]`: Applicative`](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+  loadReview: ReviewId => F[Review],
+  seller: Seller
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-  val composed = reviews andThen loadReview.lift andThen flip
+  flip(seller.reviews.map(loadReview))
+```
+]
+
+---
+
+## Problem
+
+```scala
+def `sellerReviewsF`[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[`F[_]`](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  `sellerReviews: Seller => F[List[Review]]`,
+  fseller      : F[Seller]
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  `fseller      : F[Seller]`
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): `F[List[Review]]` =
+  ???
+```
+
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  `???`
+```
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-start.svg)]
+
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-sellerReviews.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-before.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-liftFlat.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+* `???`
 ```
 ]
 
@@ -3944,22 +4231,13 @@ def sellerReviews[F[_]](
 
 ## Solution
 
-.center[![Item contexts](img/monad-seller-loadReview-flip-liftFlat-hl.svg)]
-
----
-
-## Solution
-
 .diff-add[
 ```scala
-def sellerReviews[F[_]: Applicative](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-  val composed = reviews andThen loadReview.lift andThen flip
-*
-* `composed.liftFlat.apply(fseller)`
+* `sellerReviews.liftFlat.apply(fseller)`
 ```
 ]
 
@@ -3969,14 +4247,11 @@ def sellerReviews[F[_]: Applicative](
 
 .diff-add[
 ```scala
-*def sellerReviews[F[_]: Applicative`: FlatMap`](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+*def sellerReviewsF[F[_]`: FlatMap`](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-  val composed = reviews andThen loadReview.lift andThen flip
-
-  composed.liftFlat.apply(fseller)
+  sellerReviews.liftFlat.apply(fseller)
 ```
 ]
 
@@ -3986,14 +4261,11 @@ def sellerReviews[F[_]: Applicative](
 
 .diff-rm[
 ```scala
-def sellerReviews[F[_]: Applicative: FlatMap](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-  val composed = reviews andThen loadReview.lift andThen flip
-
-* `composed.liftFlat.apply(fseller)`
+* `sellerReviews.liftFlat.apply(fseller)`
 ```
 ]
 
@@ -4003,47 +4275,11 @@ def sellerReviews[F[_]: Applicative: FlatMap](
 
 .diff-add[
 ```scala
-def sellerReviews[F[_]: Applicative: FlatMap](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-  val composed = reviews andThen loadReview.lift andThen flip
-
-* `fseller.flatMap(composed)`
-```
-]
-
----
-
-## Solution
-
-.diff-rm[
-```scala
-def sellerReviews[F[_]: Applicative: FlatMap](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
-): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-* `val composed = reviews andThen loadReview.lift andThen flip`
-
-* fseller.flatMap(`composed`)
-```
-]
-
----
-
-## Solution
-
-.diff-add[
-```scala
-def sellerReviews[F[_]: Applicative: FlatMap](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
-): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
-
-* fseller.flatMap(`reviews andThen loadReview.lift andThen flip`)
+* `fseller.flatMap(sellerReviews)`
 ```
 ]
 
@@ -4052,13 +4288,21 @@ def sellerReviews[F[_]: Applicative: FlatMap](
 ## Solution
 
 ```scala
-def sellerReviews[F[_]`: Applicative: FlatMap`](
-  fseller   : F[Seller],
-  loadReview: ReviewId => F[Review]
+def sellerReviewsF[`F[_]: FlatMap`](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
 ): F[List[Review]] =
-  val reviews  = (seller: Seller) => seller.reviews
+  fseller.flatMap(sellerReviews)
+```
 
-  fseller.flatMap(reviews andThen loadReview.lift andThen flip)
+--
+
+```scala
+def sellerReviews[`F[_]: Applicative`](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+  flip(seller.reviews.map(loadReview))
 ```
 
 ---
@@ -4132,6 +4376,31 @@ def scammyReviews(reviews: List[Review]): Boolean =
 
 ---
 
+## Problem
+
+```scala
+def scammyItem[F[_]](
+  loadSeller: SellerId => F[Seller],
+  loadReview: ReviewId => F[Review],
+  item      : Item
+): F[Boolean] =
+  ???
+
+```
+
+--
+
+```scala
+def scammyItemF[F[_]](
+  scammyItem: Item => F[Boolean],
+  fitem     : F[Item]
+): F[Boolean] =
+  ???
+
+```
+
+---
+
 ## Intuition
 
 .center[![Item contexts](img/scammy.svg)]
@@ -4165,7 +4434,7 @@ name: closing
 
 --
 
-* `FlatMap` is about working with functions whose return value is in some `F`.
+* `FlatMap` is about working with functions that return values in some `F`.
 
 --
 
