@@ -680,6 +680,19 @@ trait Functor[F[_]]:
 
 ## Common combinators
 
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): `F[B]` = ???
+```
+
+---
+
+## Common combinators
+
 .diff-rm[
 ```scala
 trait Functor[F[_]]:
@@ -2261,6 +2274,12 @@ def totalCostF[F[_]: LiftValue](
 
 ---
 
+## Intuition
+
+.center[![Pure](img/pure-required.svg)]
+
+---
+
 ## Solution
 
 ```scala
@@ -2847,6 +2866,24 @@ def itemSeller(
 
 ## Solution
 
+```scala
+def itemSeller(
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): Seller =
+  ???
+```
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-loadSeller-hl.svg)]
+
+---
+
+## Solution
+
 .diff-add[
 ```scala
 def itemSeller(
@@ -2870,6 +2907,12 @@ def itemSeller(
   ???
 ```
 ]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-fseller-hl.svg)]
 
 ---
 
@@ -2903,6 +2946,12 @@ def itemSeller[F[_]](
 
 ## Solution
 
+.center[![Item Seller](img/itemSeller-solution-hl.svg)]
+
+---
+
+## Solution
+
 .diff-rm[
 ```scala
 def itemSeller[F[_]](
@@ -2923,7 +2972,27 @@ def itemSeller[F[_]](
   loadSeller: SellerId => F[Seller],
   item      : Item
 ): F[Seller] =
-* `loadSeller(item.sellerId)`
+* `item.sellerId`
+```
+]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-solution-hl-2.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): F[Seller] =
+* `loadSeller(`item.sellerId`)`
 ```
 ]
 
@@ -3156,7 +3225,7 @@ trait `Flatten[F[_]]`:
 .diff-add[
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-* `extension [A, B](ffa: F[F[A]])`
+* `extension [A](ffa: F[F[A]])`
 *   `def flatten: F[A]`
 ```
 ]
@@ -3167,7 +3236,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def `flatten`: F[A]
 ```
 
@@ -3187,7 +3256,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: `F[A]`
 ```
 
@@ -3318,7 +3387,7 @@ def itemSellerF[F[_]: Flatten](
 .diff-add[
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 *
 * `extension [A, B](f: A => F[B])`
@@ -3333,7 +3402,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3347,7 +3416,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](`f: A => F[B]`)
@@ -3361,7 +3430,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3375,7 +3444,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3464,7 +3533,7 @@ def itemSellerF[F[_]: Flatten](
 .diff-add[
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3483,7 +3552,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3501,7 +3570,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3519,7 +3588,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3537,7 +3606,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3555,7 +3624,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3573,7 +3642,7 @@ trait Flatten[F[_]] extends Functor[F]:
 
 ```scala
 trait Flatten[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3592,7 +3661,7 @@ trait Flatten[F[_]] extends Functor[F]:
 .diff-rm[
 ```scala
 *trait `Flatten`[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])
@@ -3612,7 +3681,7 @@ trait Flatten[F[_]] extends Functor[F]:
 .diff-add[
 ```scala
 *trait `FlatMap`[F[_]] extends Functor[F]:
-  extension [A, B](ffa: F[F[A]])
+  extension [A](ffa: F[F[A]])
     def flatten: F[A]
 
   extension [A, B](f: A => F[B])

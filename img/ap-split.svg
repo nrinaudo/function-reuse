@@ -142,10 +142,10 @@
 <text text-anchor="middle" x="182.1" y="-181.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">f.curried.lift</text>
 </g>
 <!-- FA&#45;&gt;FB2FC -->
-<g id="edge12" class="edge potential">
+<g id="edge12" class="edge potential,disabled">
 <title>FA&#45;&gt;FB2FC</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M95.01,-187.97C100.78,-190.04 106.87,-192.16 112.6,-194 162.01,-209.89 219.09,-225.66 259.5,-236.39"/>
-<polygon fill="#586e75" stroke="#586e75" points="258.84,-239.84 269.4,-239.01 260.63,-233.07 258.84,-239.84"/>
+<path fill="none" stroke="#d0dce3" stroke-dasharray="1,5" d="M95.01,-187.97C100.78,-190.04 106.87,-192.16 112.6,-194 162.01,-209.89 219.09,-225.66 259.5,-236.39"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="258.84,-239.84 269.4,-239.01 260.63,-233.07 258.84,-239.84"/>
 </g>
 <!-- FB2C&#45;&gt;B2C -->
 <g id="edge8" class="edge lift,disabled">
