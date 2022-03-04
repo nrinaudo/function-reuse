@@ -68,9 +68,9 @@
 </g>
 <!-- ListReview&#45;&gt;FListReview -->
 <!-- UUID&#45;&gt;FReview -->
-<g id="edge6" class="edge">
+<g id="edge6" class="edge required">
 <title>UUID&#45;&gt;FReview</title>
-<path fill="none" stroke="#586e75" d="M264.84,-18C301.36,-18 356.96,-18 397.34,-18"/>
+<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M264.84,-18C301.36,-18 356.96,-18 397.34,-18"/>
 <polygon fill="#586e75" stroke="#586e75" points="397.52,-21.5 407.52,-18 397.52,-14.5 397.52,-21.5"/>
 <text text-anchor="middle" x="336.1" y="-21.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">loadReview</text>
 </g>

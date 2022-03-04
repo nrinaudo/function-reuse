@@ -23,10 +23,10 @@
 </g>
 <!-- Goal -->
 <!-- ListUUID -->
-<g id="node4" class="node disabled">
+<g id="node4" class="node">
 <title>ListUUID</title>
-<path fill="#ffffff" stroke="#d0dce3" d="M269.6,-108C269.6,-108 182.6,-108 182.6,-108 176.6,-108 170.6,-102 170.6,-96 170.6,-96 170.6,-84 170.6,-84 170.6,-78 176.6,-72 182.6,-72 182.6,-72 269.6,-72 269.6,-72 275.6,-72 281.6,-78 281.6,-84 281.6,-84 281.6,-96 281.6,-96 281.6,-102 275.6,-108 269.6,-108"/>
-<text text-anchor="middle" x="226.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">List[ReviewId]</text>
+<path fill="#ffffff" stroke="#586e75" d="M269.6,-108C269.6,-108 182.6,-108 182.6,-108 176.6,-108 170.6,-102 170.6,-96 170.6,-96 170.6,-84 170.6,-84 170.6,-78 176.6,-72 182.6,-72 182.6,-72 269.6,-72 269.6,-72 275.6,-72 281.6,-78 281.6,-84 281.6,-84 281.6,-96 281.6,-96 281.6,-102 275.6,-108 269.6,-108"/>
+<text text-anchor="middle" x="226.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">List[ReviewId]</text>
 </g>
 <!-- Seller&#45;&gt;ListUUID -->
 <g id="edge7" class="edge disabled">
@@ -36,7 +36,18 @@
 <text text-anchor="middle" x="132.6" y="-93.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">reviews</text>
 </g>
 <!-- ListFReview -->
+<g id="node5" class="node">
+<title>ListFReview</title>
+<path fill="#ffffff" stroke="#586e75" d="M495.6,-108C495.6,-108 402.6,-108 402.6,-108 396.6,-108 390.6,-102 390.6,-96 390.6,-96 390.6,-84 390.6,-84 390.6,-78 396.6,-72 402.6,-72 402.6,-72 495.6,-72 495.6,-72 501.6,-72 507.6,-78 507.6,-84 507.6,-84 507.6,-96 507.6,-96 507.6,-102 501.6,-108 495.6,-108"/>
+<text text-anchor="middle" x="449.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">List[F[Review]]</text>
+</g>
 <!-- ListUUID&#45;&gt;ListFReview -->
+<g id="edge8" class="edge disabled">
+<title>ListUUID&#45;&gt;ListFReview</title>
+<path fill="none" stroke="#d0dce3" d="M281.73,-90C311.49,-90 348.58,-90 380.19,-90"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="380.24,-93.5 390.24,-90 380.24,-86.5 380.24,-93.5"/>
+<text text-anchor="middle" x="336.1" y="-93.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">loadReview.lift</text>
+</g>
 <!-- UUID -->
 <g id="node8" class="node">
 <title>UUID</title>
@@ -44,19 +55,30 @@
 <text text-anchor="middle" x="226.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">ReviewId</text>
 </g>
 <!-- ListUUID&#45;&gt;UUID -->
-<g id="edge1" class="edge required">
+<g id="edge1" class="edge lift">
 <title>ListUUID&#45;&gt;UUID</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M226.1,-61.58C226.1,-53.03 226.1,-43.87 226.1,-36.17"/>
+<path fill="none" stroke="#586e75" stroke-dasharray="5,2" d="M226.1,-61.58C226.1,-53.03 226.1,-43.87 226.1,-36.17"/>
 <polygon fill="#586e75" stroke="#586e75" points="222.6,-61.59 226.1,-71.59 229.6,-61.59 222.6,-61.59"/>
 <text text-anchor="middle" x="217.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">lift</text>
 </g>
 <!-- FListReview -->
+<g id="node6" class="node goal,disabled">
+<title>FListReview</title>
+<path fill="#d0dce3" stroke="#d0dce3" d="M664.6,-36C664.6,-36 571.6,-36 571.6,-36 565.6,-36 559.6,-30 559.6,-24 559.6,-24 559.6,-12 559.6,-12 559.6,-6 565.6,0 571.6,0 571.6,0 664.6,0 664.6,0 670.6,0 676.6,-6 676.6,-12 676.6,-12 676.6,-24 676.6,-24 676.6,-30 670.6,-36 664.6,-36"/>
+<text text-anchor="middle" x="618.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">F[List[Review]]</text>
+</g>
 <!-- ListFReview&#45;&gt;FListReview -->
+<g id="edge10" class="edge disabled">
+<title>ListFReview&#45;&gt;FListReview</title>
+<path fill="none" stroke="#d0dce3" d="M492.24,-71.83C514.58,-62.2 542.19,-50.29 565.77,-40.13"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="567.46,-43.21 575.26,-36.04 564.69,-36.78 567.46,-43.21"/>
+<text text-anchor="middle" x="533.6" y="-60.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">flip</text>
+</g>
 <!-- ListReview -->
-<g id="node7" class="node goal,disabled">
+<g id="node7" class="node disabled">
 <title>ListReview</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M655.1,-108C655.1,-108 581.1,-108 581.1,-108 575.1,-108 569.1,-102 569.1,-96 569.1,-96 569.1,-84 569.1,-84 569.1,-78 575.1,-72 581.1,-72 581.1,-72 655.1,-72 655.1,-72 661.1,-72 667.1,-78 667.1,-84 667.1,-84 667.1,-96 667.1,-96 667.1,-102 661.1,-108 655.1,-108"/>
-<text text-anchor="middle" x="618.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">List[Review]</text>
+<path fill="#ffffff" stroke="#d0dce3" d="M655.1,-108C655.1,-108 581.1,-108 581.1,-108 575.1,-108 569.1,-102 569.1,-96 569.1,-96 569.1,-84 569.1,-84 569.1,-78 575.1,-72 581.1,-72 581.1,-72 655.1,-72 655.1,-72 661.1,-72 667.1,-78 667.1,-84 667.1,-84 667.1,-96 667.1,-96 667.1,-102 661.1,-108 655.1,-108"/>
+<text text-anchor="middle" x="618.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">List[Review]</text>
 </g>
 <!-- ListFReview&#45;&gt;ListReview -->
 <!-- FReview -->
@@ -66,23 +88,23 @@
 <text text-anchor="middle" x="449.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">F[Review]</text>
 </g>
 <!-- ListFReview&#45;&gt;FReview -->
-<g id="edge2" class="edge required">
+<g id="edge2" class="edge lift">
 <title>ListFReview&#45;&gt;FReview</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M449.1,-61.58C449.1,-53.03 449.1,-43.87 449.1,-36.17"/>
+<path fill="none" stroke="#586e75" stroke-dasharray="5,2" d="M449.1,-61.58C449.1,-53.03 449.1,-43.87 449.1,-36.17"/>
 <polygon fill="#586e75" stroke="#586e75" points="445.6,-61.59 449.1,-71.59 452.6,-61.59 445.6,-61.59"/>
 <text text-anchor="middle" x="440.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">lift</text>
 </g>
-<!-- ListReview&#45;&gt;Goal -->
+<!-- FListReview&#45;&gt;Goal -->
 <g id="edge5" class="edge goal,disabled">
-<title>ListReview&#45;&gt;Goal</title>
-<path fill="none" stroke="#d0dce3" stroke-width="2" d="M667.31,-90C680.72,-90 694.07,-90 703.12,-90"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" stroke-width="2" points="703.35,-93.5 713.35,-90 703.35,-86.5 703.35,-93.5"/>
+<title>FListReview&#45;&gt;Goal</title>
+<path fill="none" stroke="#d0dce3" stroke-width="2" d="M676.73,-18C686.84,-18 696.32,-18 703.24,-18"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" stroke-width="2" points="703.4,-21.5 713.4,-18 703.4,-14.5 703.4,-21.5"/>
 </g>
 <!-- ListReview&#45;&gt;FListReview -->
 <!-- UUID&#45;&gt;FReview -->
-<g id="edge6" class="edge required">
+<g id="edge6" class="edge">
 <title>UUID&#45;&gt;FReview</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M264.84,-18C301.36,-18 356.96,-18 397.34,-18"/>
+<path fill="none" stroke="#586e75" d="M264.84,-18C301.36,-18 356.96,-18 397.34,-18"/>
 <polygon fill="#586e75" stroke="#586e75" points="397.52,-21.5 407.52,-18 397.52,-14.5 397.52,-21.5"/>
 <text text-anchor="middle" x="336.1" y="-21.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">loadReview</text>
 </g>

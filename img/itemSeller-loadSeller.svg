@@ -56,9 +56,9 @@
 </g>
 <!-- UUID&#45;&gt;Seller -->
 <!-- UUID&#45;&gt;FSeller -->
-<g id="edge4" class="edge">
+<g id="edge4" class="edge required">
 <title>UUID&#45;&gt;FSeller</title>
-<path fill="none" stroke="#586e75" d="M234.88,-74.91C257.33,-64.41 287.53,-50.29 312.24,-38.74"/>
+<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M234.88,-74.91C257.33,-64.41 287.53,-50.29 312.24,-38.74"/>
 <polygon fill="#586e75" stroke="#586e75" points="313.83,-41.86 321.41,-34.45 310.87,-35.52 313.83,-41.86"/>
 <text text-anchor="middle" x="278.1" y="-68.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">loadSeller</text>
 </g>
