@@ -612,6 +612,31 @@ trait Functor[F[_]]:
 
 ## Common combinators
 
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](`fa: F[A]`)
+    def map[B](f: A => B): F[B] = ???
+```
+
+---
+
+## Common combinators
+
+```scala
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](`f: A => B`): F[B] = ???
+```
+---
+
+## Common combinators
+
 .diff-rm[
 ```scala
 trait Functor[F[_]]:
@@ -3959,43 +3984,7 @@ def sellerReviews(
 given `Functor[List]` with
   extension [A, B](f: A => B)
     def lift: List[A] => List[B] =
-      case head :: tail => f(head) :: f.lift.apply(tail)
-      case Nil          => Nil
-```
-
----
-
-## Solution
-
-```scala
-given Functor[List] with
-  extension [A, B](f: A => B)
-    def `lift`: List[A] => List[B] =
-      case head :: tail => f(head) :: f.lift.apply(tail)
-      case Nil          => Nil
-```
-
----
-
-## Solution
-
-```scala
-given Functor[List] with
-  extension [A, B](`f: A => B`)
-    def lift: List[A] => List[B] =
-      case head :: tail => f(head) :: f.lift.apply(tail)
-      case Nil          => Nil
-```
-
----
-
-## Solution
-
-```scala
-given Functor[List] with
-  extension [A, B](f: A => B)
-    def lift: `List[A] => List[B]` =
-      case head :: tail => f(head) :: f.lift.apply(tail)
+      case head :: tail => f(head) :: tail.map(f)
       case Nil          => Nil
 ```
 
@@ -4007,7 +3996,7 @@ given Functor[List] with
 given Functor[List] with
   extension [A, B](f: A => B)
     def lift: List[A] => List[B] =
-      case `head :: tail` => f(head) :: f.lift.apply(tail)
+      case `head :: tail` => f(head) :: tail.map(f)
       case Nil          => Nil
 ```
 
@@ -4019,7 +4008,7 @@ given Functor[List] with
 given Functor[List] with
   extension [A, B](f: A => B)
     def lift: List[A] => List[B] =
-      case head :: tail => `f(head)` :: f.lift.apply(tail)
+      case head :: tail => `f(head)` :: tail.map(f)
       case Nil          => Nil
 ```
 
@@ -4031,7 +4020,7 @@ given Functor[List] with
 given Functor[List] with
   extension [A, B](f: A => B)
     def lift: List[A] => List[B] =
-      case head :: tail => f(head) :: `f.lift.apply(tail)`
+      case head :: tail => f(head) :: `tail.map(f)`
       case Nil          => Nil
 ```
 
@@ -4043,7 +4032,7 @@ given Functor[List] with
 given Functor[List] with
   extension [A, B](f: A => B)
     def lift: List[A] => List[B] =
-      case head :: tail => f(head) :: f.lift.apply(tail)
+      case head :: tail => f(head) :: tail.map(f)
       case `Nil`          => `Nil`
 ```
 
