@@ -11,7 +11,7 @@ class: center, middle
 
 # Function reuse is just wishful thinking
 
-Nicolas Rinaudo • [@NicolasRinaudo] • [Besedo]
+Nicolas Rinaudo • [@NicolasRinaudo] • [J.P. Morgan]
 
 ---
 
@@ -329,18 +329,7 @@ def affordableF[`F[_]`](
 
 ```scala
 def affordableF[F[_]](
-  `fitem: F[Item]`
-): F[Boolean] =
-  ???
-```
-
----
-
-## Problem
-
-```scala
-def affordableF[F[_]](
-  fitem: F[Item]
+  fitem: `F[Item]`
 ): `F[Boolean]` =
   ???
 ```
@@ -407,26 +396,6 @@ trait `Lift`[F[_]]:
 ## Solution
 
 ```scala
-trait Lift[`F[_]`]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-```
-
----
-
-## Solution
-
-```scala
-trait Lift[F[_]]:
-  extension [A, B](f: A => B)
-    def `lift`: F[A] => F[B]
-```
-
----
-
-## Solution
-
-```scala
 trait Lift[F[_]]:
   extension [A, B](`f: A => B`)
     def lift: F[A] => F[B]
@@ -471,6 +440,12 @@ def affordableF[F[_]](
 
 ## Solution
 
+.center[![Lifting](img/lift-only.svg)]
+
+---
+
+## Solution
+
 .diff-add[
 ```scala
 def affordableF[F[_]](
@@ -479,17 +454,6 @@ def affordableF[F[_]](
 * `affordable.lift`
 ```
 ]
-
----
-
-## Solution
-
-```scala
-def affordableF[`F[_]`](
-  fitem: F[Item]
-): F[Boolean] =
-  affordable.lift
-```
 
 ---
 
@@ -519,61 +483,11 @@ def affordableF[F[_]: Lift](
 
 ---
 
-## Naming things
-
-.diff-rm[
-```scala
-*trait `Lift`[F[_]]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-```
-]
-
----
-
-## Naming things
-
-.diff-add[
-```scala
-*trait `Functor`[F[_]]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-```
-]
-
----
-
-## Naming things
-
-.diff-rm[
-```scala
-*def affordableF[F[_]: `Lift`](
-  fitem: F[Item]
-): F[Boolean] =
-  affordable.lift.apply(fitem)
-```
-]
-
----
-
-## Naming things
-
-.diff-add[
-```scala
-*def affordableF[F[_]: `Functor`](
-  fitem: F[Item]
-): F[Boolean] =
-  affordable.lift.apply(fitem)
-```
-]
-
----
-
 ## Common combinators
 
 .diff-rm[
 ```scala
-def affordableF[F[_]: Functor](
+def affordableF[F[_]: Lift](
   fitem: F[Item]
 ): F[Boolean] =
 * `affordable.lift.apply(fitem)`
@@ -586,7 +500,7 @@ def affordableF[F[_]: Functor](
 
 .diff-add[
 ```scala
-def affordableF[F[_]: Functor](
+def affordableF[F[_]: Lift](
   fitem: F[Item]
 ): F[Boolean] =
 * `fitem.map(affordable)`
@@ -599,12 +513,12 @@ def affordableF[F[_]: Functor](
 
 .diff-add[
 ```scala
-trait Functor[F[_]]:
+trait Lift[F[_]]:
   extension [A, B](f: A => B)
     def lift: F[A] => F[B]
 *
 * `extension [A](fa: F[A])`
-*   `def map[B](f: A => B): F[B] = ???`
+*   `def map[B](f: A => B): F[B] = f.lift.apply(fa)`
 ```
 ]
 
@@ -613,141 +527,43 @@ trait Functor[F[_]]:
 ## Common combinators
 
 ```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-
-  extension [A](`fa: F[A]`)
-    def map[B](f: A => B): F[B] = ???
-```
-
----
-
-## Common combinators
-
-```scala
-trait Functor[F[_]]:
+trait Lift[F[_]]:
   extension [A, B](f: A => B)
     def lift: F[A] => F[B]
 
   extension [A](fa: F[A])
-    def map[B](`f: A => B`): F[B] = ???
+    def map[B](f: A => B): F[B] = `f.lift.apply(fa)`
 ```
+
 ---
 
-## Common combinators
+## Naming things
 
 .diff-rm[
 ```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-
-  extension [A](fa: F[A])
-*   def map[B](f: A => B): F[B] = `???`
-```
-]
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-
-  extension [A](fa: F[A])
-*   def map[B](f: A => B): F[B] = `f.lift`
-```
-]
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-    def lift: F[A] => F[B]
-
-  extension [A](fa: F[A])
-*   def map[B](f: A => B): F[B] = f.lift`.apply(fa)`
-```
-]
-
----
-
-## Common combinators
-
-```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-    def `lift`: F[A] => F[B]
-
-  extension [A](fa: F[A])
-    def map[B](f: A => B): F[B] = f.lift.apply(fa)
-```
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-*   def lift: F[A] => F[B]` = fa =>`
-
-  extension [A](fa: F[A])
-    def map[B](f: A => B): F[B] = f.lift.apply(fa)
-```
-]
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-*   def lift: F[A] => F[B] = fa => `fa.map(f)`
-
-  extension [A](fa: F[A])
-    def map[B](f: A => B): F[B] = f.lift.apply(fa)
-```
-]
-
----
-
-## Common combinators
-
-.diff-rm[
-```scala
-trait Functor[F[_]]:
-  extension [A, B](f: A => B)
-*   def lift: F[A] => F[B]` = fa => fa.map(f)`
-
-  extension [A](fa: F[A])
-    def map[B](f: A => B): F[B] = f.lift.apply(fa)
-```
-]
-
----
-
-## Common combinators
-
-```scala
-trait Functor[F[_]]:
+*trait `Lift`[F[_]]:
   extension [A, B](f: A => B)
     def lift: F[A] => F[B]
 
   extension [A](fa: F[A])
     def map[B](f: A => B): F[B] = f.lift.apply(fa)
 ```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*trait `Functor`[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
+```
+]
 
 ---
 
@@ -836,20 +652,8 @@ def `cheapestF`[F[_]](
 
 ```scala
 def cheapestF[F[_]](
-  `fitem1: F[Item]`,
-  `fitem2: F[Item]`
-): F[Item] =
-  ???
-```
-
----
-
-## Problem
-
-```scala
-def cheapestF[F[_]](
-  fitem1: F[Item],
-  fitem2: F[Item]
+  fitem1: `F[Item]`,
+  fitem2: `F[Item]`
 ): `F[Item]` =
   ???
 ```
@@ -863,8 +667,8 @@ def cheapestF[F[_]](
 def cheapestF[F[_]](
   fitem1: F[Item],
   fitem2: F[Item]
-*): F[Item] =
-  `???`
+): F[Item] =
+*  `???`
 ```
 ]
 
@@ -1243,12 +1047,6 @@ trait Split[F[_]] extends Functor[F]:
 
 ## Solution
 
-.center[![Ap](img/ap-hl-curry-lift.svg)]
-
----
-
-## Solution
-
 .diff-rm[
 ```scala
 trait Split[F[_]] extends Functor[F]:
@@ -1260,6 +1058,12 @@ trait Split[F[_]] extends Functor[F]:
 *     `???`
 ```
 ]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-curry-lift.svg)]
 
 ---
 
@@ -1384,6 +1188,12 @@ def cheapestF[F[_]: Functor](
 
 ## Solution
 
+.center[![Lift2](img/lift2-only.svg)]
+
+---
+
+## Solution
+
 .diff-add[
 ```scala
 def cheapestF[F[_]: Functor](
@@ -1424,6 +1234,76 @@ def cheapestF[F[_]: Functor](
 
 ---
 
+## Common combinators
+
+.diff-rm[
+```scala
+def cheapestF[F[_]: Split](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `cheapest.lift2.apply(fitem1, fitem2)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+def cheapestF[F[_]: Split](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `(fitem1, fitem2).map2(cheapest)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+*
+* `extension [A, B, C](fab: (F[A], F[B]))`
+*   `def map2(f: (A, B) => C): F[C] =`
+*     `f.lift2.apply(fab._1, fab._2)`
+```
+]
+
+---
+
+## Common combinators
+
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      `f.lift2.apply`(fab._1, fab._2)
+```
+
+---
+
 ## Naming things
 
 .diff-rm[
@@ -1437,6 +1317,10 @@ def cheapestF[F[_]: Functor](
       Function.uncurried(
         f.curried.lift andThen (_.split)
       )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
 ```
 ]
 
@@ -1455,6 +1339,10 @@ def cheapestF[F[_]: Functor](
       Function.uncurried(
         f.curried.lift andThen (_.split)
       )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
 ```
 ]
 
@@ -1473,6 +1361,10 @@ trait Apply[F[_]] extends Functor[F]:
       Function.uncurried(
 *       f.curried.lift andThen (_.`split`)
       )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
 ```
 ]
 
@@ -1491,6 +1383,10 @@ trait Apply[F[_]] extends Functor[F]:
       Function.uncurried(
 *       f.curried.lift andThen (_.`apply`)
       )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
 ```
 ]
 
@@ -1509,6 +1405,10 @@ trait Apply[F[_]] extends Functor[F]:
       Function.uncurried(
 *       f.curried.lift andThen (_.`apply`)
       )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
 ```
 ]
 
@@ -1527,106 +1427,12 @@ trait Apply[F[_]] extends Functor[F]:
       Function.uncurried(
 *       f.curried.lift andThen (_.`ap`)
       )
-```
-]
-
----
-
-## Naming things
-
-.diff-rm[
-```scala
-*def cheapestF[F[_]: `Split`](
-  fitem1: F[Item],
-  fitem2: F[Item]
-): F[Item] =
-  cheapest.lift2.apply(fitem1, fitem2)
-```
-]
-
----
-
-## Naming things
-
-.diff-add[
-```scala
-*def cheapestF[F[_]: `Apply`](
-  fitem1: F[Item],
-  fitem2: F[Item]
-): F[Item] =
-  cheapest.lift2.apply(fitem1, fitem2)
-```
-]
-
----
-
-## Common combinators
-
-.diff-rm[
-```scala
-def cheapestF[F[_]: Apply](
-  fitem1: F[Item],
-  fitem2: F[Item]
-): F[Item] =
-* `cheapest.lift2.apply(fitem1, fitem2)`
-```
-]
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-def cheapestF[F[_]: Apply](
-  fitem1: F[Item],
-  fitem2: F[Item]
-): F[Item] =
-* `(fitem1, fitem2).map2(cheapest)`
-```
-]
-
----
-
-## Common combinators
-
-.diff-add[
-```scala
-trait Apply[F[_]] extends Functor[F]:
-  extension [A, B](ff: F[A => B])
-    def ap: F[A] => F[B]
-
-  extension [A, B, C](f: (A, B) => C)
-    def lift2: (F[A], F[B]) => F[C] =
-      Function.uncurried(
-        f.curried.lift andThen (_.ap)
-      )
-*
-* `extension [A, B, C](fab: (F[A], F[B]))`
-*   `def map2(f: (A, B) => C): F[C] =`
-*     `f.lift2.apply(fab._1, fab._2)`
-```
-]
-
----
-
-## Common combinators
-
-```scala
-trait Apply[F[_]] extends Functor[F]:
-  extension [A, B](ff: F[A => B])
-    def ap: F[A] => F[B]
-
-  extension [A, B, C](f: (A, B) => C)
-    def lift2: (F[A], F[B]) => F[C] =
-      Function.uncurried(
-        f.curried.lift andThen (_.ap)
-      )
 
   extension [A, B, C](fab: (F[A], F[B]))
     def map2(f: (A, B) => C): F[C] =
-      `f.lift2.apply`(fab._1, fab._2)
+      f.lift2.apply(fab._1, fab._2)
 ```
+]
 
 ---
 
@@ -1757,18 +1563,7 @@ def `totalCostF`[F[_]](
 
 ```scala
 def totalCostF[F[_]](
-  `fitems: List[F[Item]]`
-): F[Int] =
-  ???
-```
-
----
-
-## Problem
-
-```scala
-def totalCostF[F[_]](
-  fitems: List[F[Item]]
+  fitems: `List[F[Item]]`
 ): `F[Int]` =
   ???
 ```
@@ -2077,9 +1872,18 @@ def totalCostF[F[_]: LiftValue](
 
 ## Intuition
 
-.center[![Pure](img/pure-pre-lift.svg)]
+.center[![Pure](img/pure-totalCost.svg)]
 
 ---
+
+
+## Intuition
+
+.center[![Pure](img/pure-lifting.svg)]
+
+
+---
+
 
 ## Intuition
 
@@ -2507,62 +2311,6 @@ trait Applicative[F[_]] extends Apply[F[_]]:
 
 ---
 
-## Naming things
-
-.diff-rm[
-```scala
-*def flip[F[_]: `LiftValue`, A](
-  fas: List[F[A]]
-): F[List[A]] =
-  fas match
-    case head :: tail => (head, flip(tail)).map2(_ :: _)
-*   case Nil          => Nil.`liftValue`
-```
-]
-
----
-
-## Naming things
-
-.diff-add[
-```scala
-*def flip[F[_]: `Applicative`, A](
-  fas: List[F[A]]
-): F[List[A]] =
-  fas match
-    case head :: tail => (head, flip(tail)).map2(_ :: _)
-*   case Nil          => Nil.`pure`
-```
-]
-
----
-
-## Naming things
-
-.diff-rm[
-```scala
-*def totalCostF[F[_]: `LiftValue`](
-  fitems: List[F[Item]]
-): F[Int] =
-  flip(fitems).map(totalCost)
-```
-]
-
----
-
-## Naming things
-
-.diff-add[
-```scala
-*def totalCostF[F[_]: `Applicative`](
-  fitems: List[F[Item]]
-): F[Int] =
-  flip(fitems).map(totalCost)
-```
-]
-
----
-
 ## Key takeaways
 
 --
@@ -2728,17 +2476,6 @@ def itemSeller(
 
 ## Solution
 
-```scala
-def itemSeller(
-  item      : Item
-): Seller =
-  ???
-```
-
----
-
-## Solution
-
 .center[![Item Seller](img/itemSeller-loadSeller-required-hl.svg)]
 
 ---
@@ -2819,12 +2556,6 @@ def itemSeller[F[_]](
 
 ## Solution
 
-.center[![Item Seller](img/itemSeller-solution-hl.svg)]
-
----
-
-## Solution
-
 .diff-rm[
 ```scala
 def itemSeller[F[_]](
@@ -2834,6 +2565,13 @@ def itemSeller[F[_]](
 * `???`
 ```
 ]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-solution-hl.svg)]
+
 
 ---
 
@@ -3006,7 +2744,8 @@ def itemSellerF[F[_]: Functor](
 
 ## Intuition
 
-.center[![FlatMap](img/flatMap-pre-lift.svg)]
+.center[![FlatMap](img/flatMap-itemSeller.svg)]
+
 
 ---
 
@@ -3405,34 +3144,6 @@ trait Flatten[F[_]] extends Functor[F]:
   extension [A](fa: F[A])
     def flatMap[B](f: A => F[B]): F[B] =
       f.liftFlat.apply(fa)
-```
-]
-
----
-
-## Naming things
-
-.diff-rm[
-```scala
-*def itemSellerF[F[_]: `Flatten`](
-  itemSeller: Item => F[Seller],
-  fitem     : F[Item]
-): F[Seller] =
-  fitem.flatMap(itemSeller)
-```
-]
-
----
-
-## Naming things
-
-.diff-add[
-```scala
-*def itemSellerF[F[_]: `FlatMap`](
-  itemSeller: Item => F[Seller],
-  fitem     : F[Item]
-): F[Seller] =
-  fitem.flatMap(itemSeller)
 ```
 ]
 
@@ -3917,17 +3628,6 @@ def sellerReviews(
 
 ## Solution
 
-```scala
-def sellerReviews(
-  seller    : Seller
-): List[Review] =
-  ???
-```
-
----
-
-## Solution
-
 .center[![Item contexts](img/sellerReviews-loadReview-required.svg)]
 
 ---
@@ -4086,12 +3786,6 @@ def sellerReviews[F[_]](
 
 ## Solution
 
-.center[![Item contexts](img/sellerReviews-reviews-hl.svg)]
-
----
-
-## Solution
-
 .diff-rm[
 ```scala
 def sellerReviews[F[_]](
@@ -4101,6 +3795,13 @@ def sellerReviews[F[_]](
 * `???`
 ```
 ]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-reviews-hl.svg)]
+
 
 ---
 
@@ -4279,6 +3980,13 @@ def sellerReviewsF[F[_]](
 * `???`
 ```
 ]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-only.svg)]
+
 
 ---
 
@@ -4513,10 +4221,10 @@ name: questions
 
 # Questions?
 
-Nicolas Rinaudo • [@NicolasRinaudo] • [Besedo]
+Nicolas Rinaudo • [@NicolasRinaudo] • [J.P. Morgan]
 
 [@NicolasRinaudo]:https://twitter.com/NicolasRinaudo
-[Besedo]:https://twitter.com/besedo_official
+[J.P. Morgan]:https://www.jpmorgan.com/FR/en/about-us
     </textarea>
     <script src="js/remark.js" type="text/javascript">
     </script>
