@@ -49,17 +49,17 @@
 <text text-anchor="middle" x="336.1" y="-93.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">loadReview.lift</text>
 </g>
 <!-- UUID -->
-<g id="node8" class="node disabled">
+<g id="node8" class="node">
 <title>UUID</title>
-<path fill="#ffffff" stroke="#d0dce3" d="M252.6,-36C252.6,-36 199.6,-36 199.6,-36 193.6,-36 187.6,-30 187.6,-24 187.6,-24 187.6,-12 187.6,-12 187.6,-6 193.6,0 199.6,0 199.6,0 252.6,0 252.6,0 258.6,0 264.6,-6 264.6,-12 264.6,-12 264.6,-24 264.6,-24 264.6,-30 258.6,-36 252.6,-36"/>
-<text text-anchor="middle" x="226.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">ReviewId</text>
+<path fill="#ffffff" stroke="#586e75" d="M252.6,-36C252.6,-36 199.6,-36 199.6,-36 193.6,-36 187.6,-30 187.6,-24 187.6,-24 187.6,-12 187.6,-12 187.6,-6 193.6,0 199.6,0 199.6,0 252.6,0 252.6,0 258.6,0 264.6,-6 264.6,-12 264.6,-12 264.6,-24 264.6,-24 264.6,-30 258.6,-36 252.6,-36"/>
+<text text-anchor="middle" x="226.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">ReviewId</text>
 </g>
 <!-- ListUUID&#45;&gt;UUID -->
-<g id="edge1" class="edge required,disabled">
+<g id="edge1" class="edge required">
 <title>ListUUID&#45;&gt;UUID</title>
-<path fill="none" stroke="#d0dce3" stroke-dasharray="1,5" d="M226.1,-61.58C226.1,-53.03 226.1,-43.87 226.1,-36.17"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="222.6,-61.59 226.1,-71.59 229.6,-61.59 222.6,-61.59"/>
-<text text-anchor="middle" x="217.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">lift</text>
+<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M226.1,-61.58C226.1,-53.03 226.1,-43.87 226.1,-36.17"/>
+<polygon fill="#586e75" stroke="#586e75" points="222.6,-61.59 226.1,-71.59 229.6,-61.59 222.6,-61.59"/>
+<text text-anchor="middle" x="217.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">lift</text>
 </g>
 <!-- FListReview -->
 <!-- ListFReview&#45;&gt;FListReview -->
@@ -71,17 +71,17 @@
 </g>
 <!-- ListFReview&#45;&gt;ListReview -->
 <!-- FReview -->
-<g id="node9" class="node disabled">
+<g id="node9" class="node">
 <title>FReview</title>
-<path fill="#ffffff" stroke="#d0dce3" d="M478.6,-36C478.6,-36 419.6,-36 419.6,-36 413.6,-36 407.6,-30 407.6,-24 407.6,-24 407.6,-12 407.6,-12 407.6,-6 413.6,0 419.6,0 419.6,0 478.6,0 478.6,0 484.6,0 490.6,-6 490.6,-12 490.6,-12 490.6,-24 490.6,-24 490.6,-30 484.6,-36 478.6,-36"/>
-<text text-anchor="middle" x="449.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">F[Review]</text>
+<path fill="#ffffff" stroke="#586e75" d="M478.6,-36C478.6,-36 419.6,-36 419.6,-36 413.6,-36 407.6,-30 407.6,-24 407.6,-24 407.6,-12 407.6,-12 407.6,-6 413.6,0 419.6,0 419.6,0 478.6,0 478.6,0 484.6,0 490.6,-6 490.6,-12 490.6,-12 490.6,-24 490.6,-24 490.6,-30 484.6,-36 478.6,-36"/>
+<text text-anchor="middle" x="449.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">F[Review]</text>
 </g>
 <!-- ListFReview&#45;&gt;FReview -->
-<g id="edge2" class="edge required,disabled">
+<g id="edge2" class="edge required">
 <title>ListFReview&#45;&gt;FReview</title>
-<path fill="none" stroke="#d0dce3" stroke-dasharray="1,5" d="M449.1,-61.58C449.1,-53.03 449.1,-43.87 449.1,-36.17"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="445.6,-61.59 449.1,-71.59 452.6,-61.59 445.6,-61.59"/>
-<text text-anchor="middle" x="440.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">lift</text>
+<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M449.1,-61.58C449.1,-53.03 449.1,-43.87 449.1,-36.17"/>
+<polygon fill="#586e75" stroke="#586e75" points="445.6,-61.59 449.1,-71.59 452.6,-61.59 445.6,-61.59"/>
+<text text-anchor="middle" x="440.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">lift</text>
 </g>
 <!-- ListReview&#45;&gt;Goal -->
 <g id="edge5" class="edge goal,disabled">
@@ -91,11 +91,11 @@
 </g>
 <!-- ListReview&#45;&gt;FListReview -->
 <!-- UUID&#45;&gt;FReview -->
-<g id="edge6" class="edge required,disabled">
+<g id="edge6" class="edge required">
 <title>UUID&#45;&gt;FReview</title>
-<path fill="none" stroke="#d0dce3" stroke-dasharray="1,5" d="M264.84,-18C301.36,-18 356.96,-18 397.34,-18"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="397.52,-21.5 407.52,-18 397.52,-14.5 397.52,-21.5"/>
-<text text-anchor="middle" x="336.1" y="-21.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">loadReview</text>
+<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M264.84,-18C301.36,-18 356.96,-18 397.34,-18"/>
+<polygon fill="#586e75" stroke="#586e75" points="397.52,-21.5 407.52,-18 397.52,-14.5 397.52,-21.5"/>
+<text text-anchor="middle" x="336.1" y="-21.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">loadReview</text>
 </g>
 </g>
 </svg>
