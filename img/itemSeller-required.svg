@@ -23,11 +23,6 @@
 </g>
 <!-- Goal -->
 <!-- Seller -->
-<g id="node3" class="node">
-<title>Seller</title>
-<path fill="#ffffff" stroke="#586e75" d="M372.6,-108C372.6,-108 342.6,-108 342.6,-108 336.6,-108 330.6,-102 330.6,-96 330.6,-96 330.6,-84 330.6,-84 330.6,-78 336.6,-72 342.6,-72 342.6,-72 372.6,-72 372.6,-72 378.6,-72 384.6,-78 384.6,-84 384.6,-84 384.6,-96 384.6,-96 384.6,-102 378.6,-108 372.6,-108"/>
-<text text-anchor="middle" x="357.6" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">Seller</text>
-</g>
 <!-- FSeller -->
 <g id="node4" class="node goal">
 <title>FSeller</title>

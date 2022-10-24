@@ -75,11 +75,6 @@
 <text text-anchor="middle" x="533.6" y="-60.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">flip</text>
 </g>
 <!-- ListReview -->
-<g id="node7" class="node disabled">
-<title>ListReview</title>
-<path fill="#ffffff" stroke="#d0dce3" d="M655.1,-108C655.1,-108 581.1,-108 581.1,-108 575.1,-108 569.1,-102 569.1,-96 569.1,-96 569.1,-84 569.1,-84 569.1,-78 575.1,-72 581.1,-72 581.1,-72 655.1,-72 655.1,-72 661.1,-72 667.1,-78 667.1,-84 667.1,-84 667.1,-96 667.1,-96 667.1,-102 661.1,-108 655.1,-108"/>
-<text text-anchor="middle" x="618.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">List[Review]</text>
-</g>
 <!-- ListFReview&#45;&gt;ListReview -->
 <!-- FReview -->
 <g id="node9" class="node disabled">
