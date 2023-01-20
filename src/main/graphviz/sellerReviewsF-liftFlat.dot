@@ -1,0 +1,19 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    FSeller[label="F[Seller]" class="start" group="upper"]
+
+    Seller[group="middle"]
+    FListReview[label="F[List[Review]]" class="goal" group="middle"]
+
+    {
+        rank=same
+        FSeller -> Seller[class="lift" dir="back" xlabel="liftFlat"]
+    }
+
+    Start -> FSeller[class="start"]
+    FListReview -> Goal[class="goal"]
+    Seller -> FListReview[label="sellerReviews"]
+    FSeller -> FListReview[label="sellerReviews.liftFlat" style="invis"]
+}

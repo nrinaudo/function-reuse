@@ -1,0 +1,31 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    FItem[label="F[Item]" class="start" group="upper"]
+
+    FFSeller[label="F[F[Seller]]" group="upper" style="invis"]
+    FSeller[label="F[Seller]" class="goal" group="lower"]
+
+    Item[group="lower" class="disabled"]
+
+    {
+        rank=same
+        FItem -> Item[class="lift,disabled" dir="back" xlabel="liftFlat"]
+    }
+
+    {
+        rank=same
+        FFSeller -> FSeller[class="lift,disabled" dir="back" xlabel="lift" style="invis"]
+    }
+
+    Item -> FSeller[label="itemSeller" class="disabled"]
+
+    FItem -> FSeller[label="itemSeller.liftFlat"]
+    FItem -> FFSeller[label="itemSeller.lift" style="invis"]
+    FFSeller -> FSeller[xlabel="flatten" style="invis"]
+
+
+    Start -> FItem[class="start"]
+    FSeller -> Goal[class="goal"]
+}

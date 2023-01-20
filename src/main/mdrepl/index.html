@@ -1,0 +1,4544 @@
+<!Doctype html>
+<html>
+    <head>
+        <title>Function reuse is just wishful thinking</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    </head>
+    <body>
+        <textarea id="source">
+class: center, middle
+
+# Function reuse is just wishful thinking
+
+[Nicolas Rinaudo] • [@NicolasRinaudo]
+
+---
+
+## Item
+
+```scala
+type ItemId   = UUID
+type SellerId = UUID
+
+case class `Item`(
+  id      : ItemId,
+  name    : String,
+  price   : Int,
+  sellerId: SellerId
+)
+```
+
+---
+
+## Item
+
+```scala
+type ItemId   = UUID
+type SellerId = UUID
+
+case class Item(
+  `id      : ItemId`,
+  name    : String,
+  price   : Int,
+  sellerId: SellerId
+)
+```
+
+---
+
+## Item
+
+```scala
+type ItemId   = UUID
+type SellerId = UUID
+
+case class Item(
+  id      : ItemId,
+  `name    : String`,
+  price   : Int,
+  sellerId: SellerId
+)
+```
+
+---
+
+## Item
+
+```scala
+type ItemId   = UUID
+type SellerId = UUID
+
+case class Item(
+  id      : ItemId,
+  name    : String,
+  `price   : Int`,
+  sellerId: SellerId
+)
+```
+
+---
+
+## Item
+
+```scala
+type ItemId   = UUID
+type SellerId = UUID
+
+case class Item(
+  id      : ItemId,
+  name    : String,
+  price   : Int,
+  `sellerId: SellerId`
+)
+```
+
+```scala repl:invisible
+import java.util.UUID
+import scala.util.{Try, Success, Failure}
+```
+
+```scala repl:invisible
+type ItemId   = UUID
+type SellerId = UUID
+
+case class Item(
+  id      : ItemId,
+  name    : String,
+  price   : Int,
+  sellerId: SellerId
+)
+```
+
+---
+
+## Item
+
+.center[![Item contexts](img/item-variations-item.svg)]
+
+---
+
+## Item
+
+.center[![Item contexts](img/item-variations-option.svg)]
+
+---
+
+## Item
+
+.center[![Item contexts](img/item-variations-future.svg)]
+
+---
+
+## Item
+
+.center[![Item contexts](img/item-variations-try.svg)]
+
+---
+
+## Item
+
+.center[![Item contexts](img/item-variations-either.svg)]
+
+---
+
+## Item
+
+.center[![Item contexts](img/item-variations.svg)]
+
+---
+class: center, middle
+
+# Affordable items
+
+---
+
+## Problem
+
+```scala
+def `affordable`(item: Item): Boolean =
+  item.price < 500
+```
+
+---
+
+## Problem
+
+```scala
+def affordable(`item: Item`): Boolean =
+  item.price < 500
+```
+
+---
+
+## Problem
+
+```scala
+def affordable(item: Item): Boolean =
+  `item.price < 500`
+```
+
+```scala repl:invisible
+def affordable(item: Item): Boolean =
+  item.price < 500
+```
+
+---
+
+## Problem
+
+.center[![Item contexts](img/item-focus-item.svg)]
+
+---
+
+## Problem
+
+```scala
+def `affordableOption`(
+  oitem: Option[Item]
+): Option[Boolean] =
+  oitem match
+    case Some(item) => Some(affordable(item))
+    case None       => None
+```
+
+---
+
+## Problem
+
+```scala
+def affordableOption(
+  oitem: `Option[Item]`
+): `Option[Boolean]` =
+  oitem match
+    case Some(item) => Some(affordable(item))
+    case None       => None
+```
+
+---
+
+## Problem
+
+```scala
+def affordableOption(
+  oitem: Option[Item]
+): Option[Boolean] =
+  `oitem match`
+    `case Some(item) => Some(`affordable(item)`)`
+    `case None       => None`
+```
+
+---
+
+## Problem
+
+```scala
+def affordableOption(
+  oitem: Option[Item]
+): Option[Boolean] =
+  oitem match
+    case Some(item) => Some(`affordable(item)`)
+    case None       => None
+```
+
+```scala repl:invisible
+def affordableOption(
+  oitem: Option[Item]
+): Option[Boolean] =
+  oitem match
+    case Some(item) => Some(affordable(item))
+    case None       => None
+```
+
+---
+
+## Problem
+
+.center[![Item contexts](img/item-item-option.svg)]
+
+---
+
+## Problem
+
+```scala
+def `affordableTry`(
+  titem: Try[Item]
+): Try[Boolean] =
+  titem match
+    case Success(item) => Success(affordable(item))
+    case Failure(e)    => Failure(e)
+```
+
+---
+
+## Problem
+
+```scala
+def affordableTry(
+  titem: `Try[Item]`
+): `Try[Boolean]` =
+  titem match
+    case Success(item) => Success(affordable(item))
+    case Failure(e)    => Failure(e)
+```
+
+---
+
+## Problem
+
+```scala
+def affordableTry(
+  titem: Try[Item]
+): Try[Boolean] =
+  `titem match`
+    `case Success(item) => Success(`affordable(item)`)`
+    `case Failure(e)    => Failure(e)`
+```
+
+---
+
+## Problem
+
+```scala
+def affordableTry(
+  titem: Try[Item]
+): Try[Boolean] =
+  titem match
+    case Success(item) => Success(`affordable(item)`)
+    case Failure(e)    => Failure(e)
+```
+
+```scala repl:invisible
+def affordableTry(
+  titem: Try[Item]
+): Try[Boolean] =
+  titem match
+    case Success(item) => Success(affordable(item))
+    case Failure(e)    => Failure(e)
+```
+
+---
+
+## Problem
+
+.center[![Item contexts](img/item-item-option-try.svg)]
+
+---
+
+## Problem
+
+.center[![Item contexts](img/item-focus-everything-else.svg)]
+
+---
+
+## Problem
+
+```scala
+def `affordableF`[F[_]](
+  fitem: F[Item]
+): F[Boolean] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def affordableF[`F[_]`](
+  fitem: F[Item]
+): F[Boolean] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def affordableF[F[_]](
+  fitem: `F[Item]`
+): `F[Boolean]` =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def affordableF[F[_]](
+  fitem: F[Item]
+): F[Boolean] =
+  `???`
+```
+
+---
+
+## Intuition
+
+.center[![Lifting](img/lift-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Lifting](img/lift-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Lifting](img/lift-function.svg)]
+
+---
+
+## Intuition
+
+.center[![Lifting](img/lift-before.svg)]
+
+---
+
+## Intuition
+
+.center[![Lifting](img/lift-intuition.svg)]
+
+---
+
+## Intuition
+
+.center[![Lifting](img/lift-intuition-2.svg)]
+
+---
+
+## Solution
+
+```scala
+trait `Lift`[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+```
+
+---
+
+## Solution
+
+```scala
+trait Lift[F[_]]:
+  extension [A, B](`f: A => B`)
+    def lift: F[A] => F[B]
+```
+
+---
+
+## Solution
+
+```scala
+trait Lift[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: `F[A] => F[B]`
+```
+
+```scala repl:invisible
+trait Lift[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+```
+
+---
+
+## Solution
+
+.center[![Lifting](img/lift-intuition-2.svg)]
+
+---
+
+## Solution
+
+.center[![Lifting](img/lift-after.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def affordableF[F[_]](
+  fitem: F[Item]
+): F[Boolean] =
+* `???`
+```
+]
+
+---
+
+## Solution
+
+.center[![Lifting](img/lift-only.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def affordableF[F[_]](
+  fitem: F[Item]
+): F[Boolean] =
+* `affordable.lift`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def affordableF[F[_]`: Lift`](
+  fitem: F[Item]
+): F[Boolean] =
+  affordable.lift
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def affordableF[F[_]: Lift](
+  fitem: F[Item]
+): F[Boolean] =
+  affordable.lift`.apply(fitem)`
+```
+]
+
+```scala repl:invisible
+def affordableF[F[_]: Lift](
+  fitem: F[Item]
+): F[Boolean] =
+  affordable.lift.apply(fitem)
+```
+
+---
+
+## Common combinators
+
+.diff-rm[
+```scala
+def affordableF[F[_]: Lift](
+  fitem: F[Item]
+): F[Boolean] =
+* `affordable.lift.apply(fitem)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+def affordableF[F[_]: Lift](
+  fitem: F[Item]
+): F[Boolean] =
+* `fitem.map(affordable)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Lift[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+*
+* `extension [A](fa: F[A])`
+*   `def map[B](f: A => B): F[B] = f.lift.apply(fa)`
+```
+]
+
+---
+
+## Common combinators
+
+```scala
+trait Lift[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B] = `f.lift.apply(fa)`
+```
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+*trait `Lift`[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*trait `Functor`[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
+```
+]
+
+```scala repl:invisible
+trait Functor[F[_]]:
+  extension [A, B](f: A => B)
+    def lift: F[A] => F[B]
+
+  extension [A](fa: F[A])
+    def map[B](f: A => B): F[B] = f.lift.apply(fa)
+```
+
+```scala repl:invisible
+def affordableF[F[_]: Functor](
+  fitem: F[Item]
+): F[Boolean] =
+  fitem.map(affordable)
+```
+
+---
+
+## Key takeaways
+
+--
+
+* `Functor` is about working with a value in some `F`.
+
+--
+
+* Its primary operation is `lift` or, equivalently, `map`.
+
+---
+class: center, middle
+
+# Cheapest of two items
+
+---
+
+## Problem
+
+```scala
+def `cheapest`(
+  item1: Item,
+  item2: Item
+): Item =
+  if item1.price > item2.price then item2
+  else                              item1
+```
+
+---
+
+## Problem
+
+```scala
+def cheapest(
+  `item1: Item`,
+  `item2: Item`
+): Item =
+  if item1.price > item2.price then item2
+  else                              item1
+```
+
+---
+
+## Problem
+
+```scala
+def cheapest(
+  item1: Item,
+  item2: Item
+): Item =
+  if `item1.price > item2.price` then item2
+  else                              item1
+```
+
+---
+
+## Problem
+
+```scala
+def cheapest(
+  item1: Item,
+  item2: Item
+): Item =
+  if item1.price > item2.price then `item2`
+  else                              `item1`
+```
+
+```scala repl:invisible
+def cheapest(
+  item1: Item,
+  item2: Item
+): Item =
+  if item1.price > item2.price then item2
+  else                              item1
+```
+
+---
+
+## Problem
+
+```scala
+def `cheapestF`[F[_]](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def cheapestF[F[_]](
+  fitem1: `F[Item]`,
+  fitem2: `F[Item]`
+): `F[Item]` =
+  ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def cheapestF[F[_]](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `???`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def cheapestF[F[_]](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `fitem1.map { item1 =>`
+* `}`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+*def cheapestF[F[_]`: Functor`](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  fitem1.map { item1 =>
+  }
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  fitem1.map { item1 =>
+*   `fitem2.map { item2 => `
+*   `}`
+  }
+```
+]
+
+---
+
+## Problem
+
+```scala
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  fitem1.map { `item1` =>
+    fitem2.map { `item2` =>
+    }
+  }
+```
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  fitem1.map { item1 =>
+    fitem2.map { item2 =>
+*     `cheapest(item1, item2)`
+    }
+  }
+```
+]
+
+---
+
+## Problem
+
+```scala
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  `fitem1.map` { item1 =>
+    `fitem2.map` { item2 =>
+      cheapest(item1, item2)
+    }
+  }
+```
+
+---
+
+## Problem
+
+```scala repl:fail
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  fitem1.map { item1 =>
+    fitem2.map { item2 =>
+      cheapest(item1, item2)
+    }
+  }
+```
+
+---
+
+## Intuition
+
+.center[![Lift2](img/lift2-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Lift2](img/lift2-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Lift2](img/lift2-cheapest.svg)]
+
+---
+
+## Intuition
+
+.center[![Lift2](img/lift2-before.svg)]
+
+---
+
+## Intuition
+
+.center[![Lift2](img/lift2-required.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-f.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-curried.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-curried.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-lift.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-lift.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-pre-split.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-pre-split.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-pre-split-2.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-split.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-split-2.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-split-3.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-split.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-split-2.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-before-uncurried.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-uncurried.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Ap](img/ap-full.svg)]
+
+---
+
+## Solution
+
+```scala
+trait `Split[F[_]]`:
+```
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-lift.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*trait Split[F[_]] `extends Functor[F]`:
+```
+]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-split.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+* `extension [A, B](ff: F[A => B])`
+*   `def split: F[A] => F[B]`
+```
+]
+
+---
+
+## Solution
+
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](`ff: F[A => B]`)
+    def split: F[A] => F[B]
+```
+
+---
+
+## Solution
+
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: `F[A] => F[B]`
+```
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-split.svg)]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-split-concrete.svg)]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-lift2.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+*
+* `extension [A, B, C](f: (A, B) => C)`
+*   `def lift2: (F[A], F[B]) => F[C] =`
+*     `???`
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+*     `???`
+```
+]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-curry-lift.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+*     `f.curried.lift`
+
+```
+]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-curried-split.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+*     f.curried.lift `andThen (_.split)`
+```
+]
+
+---
+
+## Solution
+
+.center[![Ap](img/ap-hl-split-uncurry.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+*     `Function.uncurried(`
+*     `  `f.curried.lift andThen (_.split)
+*     `)`
+```
+]
+
+```scala repl:invisible
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+```
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+*
+* `extension [A, B, C, D](f: (A, B, C) => D)`
+*   `def lift3: (F[A], F[B], F[C]) => F[D] =`
+*     `???`
+```
+]
+
+--
+
+Let me know what you came up with at [@NicolasRinaudo](https://twitter.com/NicolasRinaudo)!
+
+---
+
+## Solution
+
+.center[![Lift2](img/lift2-required.svg)]
+
+---
+
+## Solution
+
+.center[![Lift2](img/lift2-after.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `fitem1.map { item1 =>`
+*   `fitem2.map { item2 =>`
+*     `cheapest(item1, item2)`
+*   `}`
+* `}`
+```
+]
+
+---
+
+## Solution
+
+.center[![Lift2](img/lift2-only.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def cheapestF[F[_]: Functor](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `cheapest.lift2.apply(fitem1, fitem2)`
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+*def cheapestF[F[_]: `Functor`](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  cheapest.lift2.apply(fitem1, fitem2)
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def cheapestF[F[_]: `Split`](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  cheapest.lift2.apply(fitem1, fitem2)
+```
+]
+
+```scala repl:invisible
+def cheapestF[F[_]: Split](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  cheapest.lift2.apply(fitem1, fitem2)
+```
+
+
+---
+
+## Common combinators
+
+.diff-rm[
+```scala
+def cheapestF[F[_]: Split](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `cheapest.lift2.apply(fitem1, fitem2)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+def cheapestF[F[_]: Split](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+* `(fitem1, fitem2).map2(cheapest)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+*
+* `extension [A, B, C](fab: (F[A], F[B]))`
+*   `def map2(f: (A, B) => C): F[C] =`
+*     `f.lift2.apply(fab._1, fab._2)`
+```
+]
+
+---
+
+## Common combinators
+
+```scala
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      `f.lift2.apply`(fab._1, fab._2)
+```
+
+```scala repl:invisible
+trait Split[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+*trait `Split`[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*trait `Apply`[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def split: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.split)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+]
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+trait Apply[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+*   def `split`: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+*       f.curried.lift andThen (_.`split`)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+trait Apply[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+*   def `apply`: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+*       f.curried.lift andThen (_.`apply`)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+]
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+trait Apply[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+*   def `apply`: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+*       f.curried.lift andThen (_.`apply`)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+trait Apply[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+*   def `ap`: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+*       f.curried.lift andThen (_.`ap`)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+]
+
+```scala repl:invisible
+trait Apply[F[_]] extends Functor[F]:
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B]
+
+  extension [A, B, C](f: (A, B) => C)
+    def lift2: (F[A], F[B]) => F[C] =
+      Function.uncurried(
+        f.curried.lift andThen (_.ap)
+      )
+
+  extension [A, B, C](fab: (F[A], F[B]))
+    def map2(f: (A, B) => C): F[C] =
+      f.lift2.apply(fab._1, fab._2)
+```
+
+```scala repl:invisible
+def cheapestF[F[_]: Apply](
+  fitem1: F[Item],
+  fitem2: F[Item]
+): F[Item] =
+  (fitem1, fitem2).map2(cheapest)
+```
+
+---
+
+## Key takeaways
+
+--
+
+* `Apply` is about working with multiple values in some `F`.
+
+--
+
+* Its primary operation is `ap`.
+
+--
+
+* Its most commonly used operation is `liftN` or, equivalently, `mapN`.
+
+---
+class: center, middle
+
+# Total cost of a basket
+
+---
+
+## Problem
+
+```scala
+def `totalCost`(
+  items: List[Item]
+): Int =
+  items match
+    case head :: tail => head.price + totalCost(tail)
+    case Nil          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def totalCost(
+  `items: List[Item]`
+): Int =
+  items match
+    case head :: tail => head.price + totalCost(tail)
+    case Nil          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def totalCost(
+  items: List[Item]
+): `Int` =
+  items match
+    case head :: tail => head.price + totalCost(tail)
+    case Nil          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def totalCost(
+  items: List[Item]
+): Int =
+  items match
+    case `head :: tail` => head.price + totalCost(tail)
+    case Nil          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def totalCost(
+  items: List[Item]
+): Int =
+  items match
+    case head :: tail => `head.price + totalCost(tail)`
+    case Nil          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def totalCost(
+  items: List[Item]
+): Int =
+  items match
+    case head :: tail => head.price + totalCost(tail)
+    case `Nil`          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def totalCost(
+  items: List[Item]
+): Int =
+  items match
+    case head :: tail => head.price + totalCost(tail)
+    case Nil          => `0`
+```
+
+```scala repl:invisible
+def totalCost(
+  items: List[Item]
+): Int =
+  items match
+    case head :: tail => head.price + totalCost(tail)
+    case Nil          => 0
+```
+
+---
+
+## Problem
+
+```scala
+def `totalCostF`[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def totalCostF[F[_]](
+  fitems: `List[F[Item]]`
+): `F[Int]` =
+  ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+* `???`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+* `fitems match`
+*   `case head :: tail => ???`
+*   `case Nil          => ???`
+```
+]
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+*   case head :: tail => `???`
+    case Nil          => ???
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+*   case head :: tail => `head.price + totalCostF(tail)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Problem
+
+```scala
+def totalCostF[F[_]](
+  fitems: List[`F[Item]`]
+): F[Int] =
+  fitems match
+    case head :: tail => `head`.price + totalCostF(tail)
+    case Nil          => ???
+```
+
+---
+
+## Problem
+
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): `F[Int]` =
+  fitems match
+    case head :: tail => head.price + `totalCostF(tail)`
+    case Nil          => ???
+```
+
+
+---
+
+## Problem
+
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => head.price `+` totalCostF(tail)
+    case Nil          => ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+*   case head :: tail => `head.price + totalCostF(tail)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def totalCostF[F[_]](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+*   case head :: tail => `(head, totalCostF(tail)).map2(_.price + _)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+*def totalCostF[F[_]`: Apply`](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+    case Nil          => ???
+```
+]
+
+---
+
+## Problem
+
+```scala
+def totalCostF[F[_]: Apply](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+    case Nil          => `???`
+```
+
+---
+
+## Solution
+
+```scala
+trait `LiftValue`[F[_]]:
+  extension [A](a: A)
+    def liftValue: F[A]
+```
+
+---
+
+## Solution
+
+```scala
+trait LiftValue[F[_]]:
+  extension [A](`a: A`)
+    def liftValue: F[A]
+```
+
+---
+
+## Solution
+
+```scala
+trait LiftValue[F[_]]:
+  extension [A](a: A)
+    def liftValue: `F[A]`
+```
+
+---
+
+## Solution
+
+```scala
+def totalCostF[`F[_]: Apply`](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+    case Nil          => ???
+```
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*trait LiftValue[F[_]] `extends Apply[F]`:
+  extension [A](a: A)
+    def liftValue: F[A]
+```
+]
+
+```scala repl:invisible
+trait LiftValue[F[_]] extends Apply[F]:
+  extension [A](a: A)
+    def liftValue: F[A]
+```
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+*def totalCostF[F[_]: `Apply`](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def totalCostF[F[_]: `LiftValue`](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+*   case Nil          => `???`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+*   case Nil          => `0.liftValue`
+```
+]
+
+```scala repl:invisible
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+  fitems match
+    case head :: tail => (head, totalCostF(tail)).map2(_.price + _)
+    case Nil          => 0.liftValue
+```
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-totalCost.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-before.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-totalCost.svg)]
+
+---
+
+
+## Intuition
+
+.center[![Pure](img/pure-lifting.svg)]
+
+
+---
+
+
+## Intuition
+
+.center[![Pure](img/pure-lift.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-pre-flip.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-flip-required.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-solution-required.svg)]
+
+---
+
+## Intuition
+
+.center[![Pure](img/pure-required.svg)]
+
+---
+
+## Solution
+
+```scala
+def `flip`[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  ???
+```
+
+---
+
+## Solution
+
+```scala
+def flip[F[_], A](
+  `fas: List[F[A]]`
+): F[List[A]] =
+  ???
+```
+
+---
+
+## Solution
+
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): `F[List[A]]` =
+  ???
+```
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+* `???`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+* `fas match`
+*   `case head :: tail => ???`
+*   `case Nil          => ???`
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+*   case head :: tail => `???`
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+*   case head :: tail => `head :: flip(tail)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+```scala
+def flip[F[_], A](
+  fas: List[`F[A]`]
+): F[List[A]] =
+  fas match
+    case head :: tail => `head` :: flip(tail)
+    case Nil          => ???
+```
+
+---
+
+## Solution
+
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): `F[List[A]]` =
+  fas match
+    case head :: tail => head :: `flip(tail)`
+    case Nil          => ???
+```
+
+---
+
+## Solution
+
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => head `::` flip(tail)
+    case Nil          => ???
+```
+
+
+
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+*   case head :: tail => `head :: flip(tail)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def flip[F[_], A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+*   case head :: tail => `(head, flip(tail)).map2(_ :: _)`
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def flip[F[_]`: Apply`, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+    case Nil          => ???
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def flip[F[_]: Apply, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+*   case Nil          => `???`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def flip[F[_]: Apply, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+*   case Nil          => `Nil.liftValue`
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def flip[F[_]: `Apply`, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+    case Nil          => Nil.liftValue
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def flip[F[_]: `LiftValue`, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+    case Nil          => Nil.liftValue
+```
+]
+
+```scala repl:invisible
+def flip[F[_]: LiftValue, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+    case Nil          => Nil.liftValue
+```
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-flip-required.svg)]
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-flip.svg)]
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-after.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `fitems match`
+*   `case head :: tail => (head, totalCostF(tail)).map2(_.price + _)`
+*   `case Nil          => 0.liftValue`
+```
+]
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-flip-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `flip[F, Item]`
+```
+]
+
+---
+
+## Solution
+
+.center[![Pure](img/pure-totalCost-lift-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* flip[F, Item] `andThen totalCost.lift`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `(`flip[F, Item] andThen totalCost.lift`).apply(fitems)`
+```
+]
+
+```scala repl:invisible
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+  (flip[F, Item] andThen totalCost.lift).apply(fitems)
+```
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `(flip[F, Item] andThen totalCost.lift).apply(fitems)`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+* `flip(fitems).map(totalCost)`
+```
+]
+
+```scala repl:invisible
+def totalCostF[F[_]: LiftValue](
+  fitems: List[F[Item]]
+): F[Int] =
+  flip(fitems).map(totalCost)
+```
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+*trait `LiftValue`[F[_]] extends Apply[F]:
+  extension [A](a: A)
+    def liftValue: F[A]
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*trait `Applicative`[F[_]] extends Apply[F]:
+  extension [A](a: A)
+    def liftValue: F[A]
+```
+]
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+trait Applicative[F[_]] extends Apply[F]:
+  extension [A](a: A)
+*   def `liftValue`: F[A]
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+trait Applicative[F[_]] extends Apply[F]:
+  extension [A](a: A)
+*   def `pure`: F[A]
+```
+]
+
+```scala repl:invisible
+trait Applicative[F[_]] extends Apply[F]:
+  extension [A](a: A)
+    def pure: F[A]
+```
+
+```scala repl:invisible
+def flip[F[_]: Applicative, A](
+  fas: List[F[A]]
+): F[List[A]] =
+  fas match
+    case head :: tail => (head, flip(tail)).map2(_ :: _)
+    case Nil          => Nil.pure
+```
+
+---
+
+## Key takeaways
+
+--
+
+* `Applicative` is about working with any number of values in some `F`.
+
+--
+
+* Its primary operation is `pure`.
+
+--
+
+* Its most useful application is `flip`.
+
+---
+class: center, middle
+
+# Item seller
+
+---
+
+## Problem
+
+```scala
+type ReviewId = UUID
+
+case class `Seller`(
+  id     : SellerId,
+  name   : String,
+  reviews: List[ReviewId]
+)
+```
+
+---
+
+## Problem
+
+```scala
+type ReviewId = UUID
+
+case class Seller(
+  `id     : SellerId`,
+  name   : String,
+  reviews: List[ReviewId]
+)
+```
+
+---
+
+## Problem
+
+```scala
+type ReviewId = UUID
+
+case class Seller(
+  id     : SellerId,
+  `name   : String`,
+  reviews: List[ReviewId]
+)
+```
+
+---
+
+## Problem
+
+```scala
+type ReviewId = UUID
+
+case class Seller(
+  id     : SellerId,
+  name   : String,
+  `reviews: List[ReviewId]`
+)
+```
+
+```scala repl:invisible
+type ReviewId = UUID
+
+case class Seller(
+  id     : SellerId,
+  name   : String,
+  reviews: List[ReviewId]
+)
+```
+
+---
+
+## Problem
+
+```scala
+def `itemSeller`(
+  item: Item
+): Seller =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSeller(
+  `item: Item`
+): Seller =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSeller(
+  item: Item
+): `Seller` =
+  ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def itemSeller(
+  item: Item
+): Seller =
+* `???`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def itemSeller(
+  item: Item
+): Seller =
+* `item.sellerId`
+```
+]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-sellerId.svg)]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-nope.svg)]
+
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-loadSeller.svg)]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-before-change-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-change-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item Seller](img/itemSeller-required.svg)]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-loadSeller-required-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSeller(
+* `loadSeller: SellerId => F[Seller],`
+  item      : Item
+): Seller =
+  item.sellerId
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def itemSeller[`F[_]`](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): Seller =
+  item.sellerId
+```
+]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-loadSeller-required-hl.svg)]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-loadSeller-hl.svg)]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-fseller-hl.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+*): `Seller` =
+  item.sellerId
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+*): `F[Seller]` =
+  item.sellerId
+```
+]
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-solution.svg)]
+
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-solution-hl.svg)]
+
+
+---
+
+## Solution
+
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): F[Seller] =
+  `item.sellerId`
+```
+
+---
+
+## Solution
+
+.center[![Item Seller](img/itemSeller-solution-hl-2.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): F[Seller] =
+* `loadSeller(`item.sellerId`)`
+```
+]
+
+```scala repl:invisible
+def itemSeller[F[_]](
+  loadSeller: SellerId => F[Seller],
+  item      : Item
+): F[Seller] =
+  loadSeller(item.sellerId)
+```
+
+---
+
+## Problem
+
+```scala
+def `itemSellerF`[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[F[_]](
+  `itemSeller: Item => F[Seller]`,
+  fitem     : F[Item]
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  `fitem     : F[Item]`
+): F[Seller] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): `F[Seller]` =
+  ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `???`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def itemSellerF[F[_]](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `fitem.map(itemSeller)`
+```
+]
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+*def itemSellerF[F[_]`: Functor`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  fitem.map(itemSeller)
+```
+]
+
+---
+
+## Problem
+
+```scala repl:fail
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  fitem.map(itemSeller)
+```
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-start.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-itemSeller.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-before.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-itemSeller.svg)]
+
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-lift.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-pre-flatten-required.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-flatten-required.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-pre-complicated-required.svg)]
+
+---
+
+## Intuition
+
+.center[![FlatMap](img/flatMap-complicated-required.svg)]
+
+---
+
+## Solution
+
+```scala
+trait `Flatten[F[_]]`:
+```
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-lift-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*trait Flatten[F[_]] `extends Functor[F]`:
+```
+]
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-flatten-required-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+* `extension [A](ffa: F[F[A]])`
+*   `def flatten: F[A]`
+```
+]
+
+---
+
+## Solution
+
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](`ffa: F[F[A]]`)
+    def flatten: F[A]
+```
+
+---
+
+## Solution
+
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: `F[A]`
+```
+
+```scala repl:invisible
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+```
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-flatten-required-hl.svg)]
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-flatten-hl.svg)]
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-complicated.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `fitem.map(itemSeller)`
+```
+]
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-lift-hl-2.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `itemSeller.lift`
+```
+]
+
+---
+
+## Solution
+
+.center[![FlatMap](img/flatMap-flatten-hl-2.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSellerF[F[_]: Functor](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* itemSeller.lift` andThen (_.flatten)`
+```
+]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+*def itemSellerF[F[_]: `Functor`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  itemSeller.lift andThen (_.flatten)
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def itemSellerF[F[_]: `Flatten`](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  itemSeller.lift andThen (_.flatten)
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `(`itemSeller.lift andThen (_.flatten)`).apply(fitem)`
+```
+]
+
+```scala repl:invisible
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  (itemSeller.lift andThen (_.flatten)).apply(fitem)
+```
+
+---
+
+## Common combinators
+
+.center[![FlatMap](img/flatMap-flatten-hl-2.svg)]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+*
+* `extension [A, B](f: A => F[B])`
+*   `def liftFlat: F[A] => F[B] =`
+*     `f.lift andThen (_.flatten)`
+```
+]
+
+---
+
+## Common combinators
+
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      `f.lift andThen (_.flatten)`
+```
+
+```scala repl:invisible
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+```
+
+---
+
+## Common combinators
+
+.center[![FlatMap](img/flatMap-flatten-hl-2.svg)]
+
+---
+
+## Common combinators
+
+.center[![FlatMap](img/flatMap-flatMap.svg)]
+
+---
+
+## Common combinators
+
+.center[![FlatMap](img/flatMap-flatMap-full.svg)]
+
+---
+
+## Common combinators
+
+.diff-rm[
+```scala
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `(`itemSeller.`lift andThen (_.flatten))`.apply(fitem)
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* itemSeller.`liftFlat`.apply(fitem)
+```
+]
+
+```scala repl:invisible
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+  itemSeller.liftFlat.apply(fitem)
+```
+
+---
+
+## Common combinators
+
+.diff-rm[
+```scala
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `itemSeller.liftFlat.apply(fitem)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+def itemSellerF[F[_]: Flatten](
+  itemSeller: Item => F[Seller],
+  fitem     : F[Item]
+): F[Seller] =
+* `fitem.flatMap(itemSeller)`
+```
+]
+
+---
+
+## Common combinators
+
+.diff-add[
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+*
+* `extension [A](fa: F[A])`
+*   `def flatMap[B](f: A => F[B]): F[B] =`
+*     `f.liftFlat.apply(fa)`
+```
+]
+
+---
+
+## Common combinators
+
+```scala
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      `f.liftFlat.apply`(fa)
+```
+
+```scala repl:invisible
+trait Flatten[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+*trait `Flatten`[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*trait `FlatMap`[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+```scala repl:invisible
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+*
+* `extension [A, B](ff: F[A => B])`
+*   `def ap: F[A] => F[B] =`
+*     `???`
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: `F[A] => F[B]` =
+      ???
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+
+---
+
+## Not just a Functor
+
+.diff-rm[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+*     `???`
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+*     `fa =>`
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+*     `fa => fa.map { a =>`
+*     `}`
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](`ff: F[A => B]`)
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+      }
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+*       `ff.map { f => `
+*       `}`
+      }
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+        ff.map { f =>
+*         `f(a)`
+        }
+      }
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => `fa.map` { a =>
+        `ff.map` { f =>
+          f(a)
+        }
+      }
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+trait FlatMap[F[_]] extends Functor[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+        ff.map { f =>
+          f(a)
+        }
+*     }`.flatten`
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+.diff-rm[
+```scala
+*trait FlatMap[F[_]] extends `Functor`[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+        ff.map { f =>
+          f(a)
+        }
+      }.flatten
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+---
+
+## Not just a Functor
+
+.diff-add[
+```scala
+*trait FlatMap[F[_]] extends `Apply`[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+        ff.map { f =>
+          f(a)
+        }
+      }.flatten
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+]
+
+```scala repl:invisible
+trait FlatMap[F[_]] extends Apply[F]:
+  extension [A](ffa: F[F[A]])
+    def flatten: F[A]
+
+  extension [A, B](ff: F[A => B])
+    def ap: F[A] => F[B] =
+      fa => fa.map { a =>
+        ff.map { f =>
+          f(a)
+        }
+      }.flatten
+
+  extension [A, B](f: A => F[B])
+    def liftFlat: F[A] => F[B] =
+      f.lift andThen (_.flatten)
+
+  extension [A](fa: F[A])
+    def flatMap[B](f: A => F[B]): F[B] =
+      f.liftFlat.apply(fa)
+```
+
+---
+
+## Key takeaways
+
+--
+
+* `FlatMap` is about working with functions that return values in some `F`.
+
+--
+
+* Its primary operation is `flatten`.
+
+--
+
+* Its most commonly used operation is `liftFlat` or, equivalently, `flatMap`.
+
+---
+class: center, middle
+
+# Seller reviews
+
+---
+
+## Problem
+
+```scala
+case class `Review`(
+  id   : ReviewId,
+  body : String
+)
+```
+
+---
+
+## Problem
+
+```scala
+case class Review(
+  `id   : ReviewId`,
+  body : String
+)
+```
+
+---
+
+## Problem
+
+```scala
+case class Review(
+  id   : ReviewId,
+  `body : String`
+)
+```
+
+```scala repl:invisible
+case class Review(
+  id   : ReviewId,
+  body : String
+)
+```
+
+---
+
+## Problem
+
+```scala
+def `sellerReviews`(
+  seller: Seller
+): List[Review] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviews(
+  `seller: Seller`
+): List[Review] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviews(
+  seller: Seller
+): `List[Review]` =
+  ???
+```
+
+---
+
+## Problem
+
+.diff-rm[
+```scala
+def sellerReviews(
+  seller: Seller
+): List[Review] =
+* `???`
+```
+]
+
+
+---
+
+## Problem
+
+.diff-add[
+```scala
+def sellerReviews(
+  seller: Seller
+): List[Review] =
+*  `seller.reviews`
+```
+]
+
+```scala repl:invisible
+def sellerReviews(
+  seller: Seller
+): List[Review] =
+  ???
+```
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-reviews.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-nope.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-loadReview.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-lifted.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-nope-2.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-flip.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-before-change-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-change-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviews-required.svg)]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-loadReview-required.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviews(
+* `loadReview: ReviewId => F[Review],`
+  seller    : Seller
+): List[Review] =
+  seller.reviews
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def sellerReviews[`F[_]`](
+  loadReview: ReviewId => F[Review],
+  seller    : Seller
+): List[Review] =
+  seller.reviews
+```
+]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-loadReview-required.svg)]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-loadReview-fullfilled.svg)]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-lift-required.svg)]
+
+---
+
+## Solution
+
+```scala
+given `Functor[List]` with
+  extension [A, B](f: A => B)
+    def lift: List[A] => List[B] =
+      as => as.map(f)
+```
+
+---
+
+## Solution
+
+```scala
+given Functor[List] with
+  extension [A, B](f: A => B)
+    def `lift`: List[A] => List[B] =
+      as => as.map(f)
+```
+
+---
+
+## Solution
+
+```scala
+given Functor[List] with
+  extension [A, B](f: A => B)
+    def lift: List[A] => List[B] =
+      `as => as.map(f)`
+```
+
+```scala repl:invisible
+given Functor[List] with
+  extension [A, B](f: A => B)
+    def lift: List[A] => List[B] =
+      as => as.map(f)
+```
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-lift-required.svg)]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-lift-fullfilled.svg)]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-flistreview.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+*): `List[Review]` =
+  seller.reviews
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+*): `F[List[Review]]` =
+  seller.reviews
+```
+]
+
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-reviews-hl.svg)]
+
+
+---
+
+## Solution
+
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+  `seller.reviews`
+```
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-loadReview-lifted-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+* seller.reviews`.map(loadReview)`
+```
+]
+
+---
+
+## Solution
+
+.center[![Item contexts](img/sellerReviews-flip-hl.svg)]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviews[F[_]](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+* `flip(`seller.reviews.map(loadReview)`)`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def sellerReviews[F[_]`: Applicative`](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+  flip(seller.reviews.map(loadReview))
+```
+]
+
+```scala repl:invisible
+def sellerReviews[F[_]: Applicative](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+  flip(seller.reviews.map(loadReview))
+```
+
+---
+
+## Problem
+
+```scala
+def `sellerReviewsF`[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  `sellerReviews: Seller => F[List[Review]]`,
+  fseller      : F[Seller]
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  `fseller      : F[Seller]`
+): F[List[Review]] =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): `F[List[Review]]` =
+  ???
+```
+
+---
+
+## Problem
+
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  `???`
+```
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-start.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-goal.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-sellerReviews.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-before.svg)]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF.svg)]
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+* `???`
+```
+]
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/sellerReviewsF-only.svg)]
+
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviewsF[F[_]](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+* `sellerReviews.liftFlat`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+*def sellerReviewsF[F[_]`: FlatMap`](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  sellerReviews.liftFlat
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+* sellerReviews.liftFlat`.apply(fseller)`
+```
+]
+
+```scala repl:invisible
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  sellerReviews.liftFlat.apply(fseller)
+```
+
+---
+
+## Solution
+
+.diff-rm[
+```scala
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+* `sellerReviews.liftFlat.apply(fseller)`
+```
+]
+
+---
+
+## Solution
+
+.diff-add[
+```scala
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+* `fseller.flatMap(sellerReviews)`
+```
+]
+
+```scala repl:invisible
+def sellerReviewsF[F[_]: FlatMap](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  fseller.flatMap(sellerReviews)
+```
+
+---
+
+## Solution
+
+```scala
+def sellerReviewsF[`F[_]: FlatMap`](
+  sellerReviews: Seller => F[List[Review]],
+  fseller      : F[Seller]
+): F[List[Review]] =
+  fseller.flatMap(sellerReviews)
+```
+
+--
+
+```scala
+def sellerReviews[`F[_]: Applicative`](
+  loadReview: ReviewId => F[Review],
+  seller: Seller
+): F[List[Review]] =
+  flip(seller.reviews.map(loadReview))
+```
+
+---
+
+## Solution
+
+```scala
+trait `Monad[F[_]]` extends FlatMap[F] with Applicative[F]
+```
+
+---
+
+## Solution
+
+```scala
+trait Monad[F[_]] extends `FlatMap[F] with Applicative[F]`
+```
+
+```scala repl:invisible
+trait Monad[F[_]] extends FlatMap[F] with Applicative[F]
+```
+
+---
+
+## Key takeaways
+
+--
+
+* `Monad` is both an `Applicative` and a `FlatMap`.
+
+--
+
+* ... that's really all there is to it.
+
+---
+class: center, middle
+
+# Scammy items
+
+---
+
+## Problem
+
+```scala
+def `scammyReviews`(reviews: List[Review]): Boolean =
+  reviews.exists(r => r.body.contains("scam"))
+```
+
+---
+
+## Problem
+
+```scala
+def scammyReviews(`reviews: List[Review]`): Boolean =
+  reviews.exists(r => r.body.contains("scam"))
+```
+
+---
+
+## Problem
+
+```scala
+def scammyReviews(reviews: List[Review]): Boolean =
+  `reviews.exists`(r => r.body.contains("scam"))
+```
+
+---
+
+## Problem
+
+```scala
+def scammyReviews(reviews: List[Review]): Boolean =
+  reviews.exists(r => r.`body.contains("scam")`)
+```
+
+```scala repl:invisible
+def scammyReviews(reviews: List[Review]): Boolean =
+  reviews.exists(r => r.body.contains("scam"))
+```
+
+---
+
+## Problem
+
+```scala repl
+def scammyItem[F[_]](
+  loadSeller: SellerId => F[Seller],
+  loadReview: ReviewId => F[Review],
+  item      : Item
+): F[Boolean] =
+  ???
+```
+
+```scala repl:invisible
+def scammyItem[F[_]: Monad](
+  loadSeller: SellerId => F[Seller],
+  loadReview: ReviewId => F[Review],
+  item      : Item
+): F[Boolean] =
+  loadSeller(item.sellerId).flatMap { seller =>
+    flip(seller.reviews.map(loadReview)).map(scammyReviews)
+  }
+```
+
+--
+
+```scala repl
+def scammyItemF[F[_]](
+  scammyItem: Item => F[Boolean],
+  fitem     : F[Item]
+): F[Boolean] =
+  ???
+```
+
+```scala repl:invisible
+def scammyItemF[F[_]: FlatMap](
+  scammyItem: Item => F[Boolean],
+  fitem     : F[Item]
+): F[Boolean] =
+  fitem.flatMap(scammyItem)
+```
+
+---
+
+## Intuition
+
+.center[![Item contexts](img/scammy.svg)]
+
+--
+
+Let me know what you came up with at [@NicolasRinaudo](https://twitter.com/NicolasRinaudo)!
+
+---
+
+class: center, middle
+name: closing
+
+# In closing
+
+---
+
+## If you only remember 1 slide...
+
+--
+
+* `Functor` is about working with a value in some `F`.
+
+--
+
+* `Apply` is about working with multiple values in some `F`.
+
+--
+
+* `Applicative` is about working with any number of values in some `F`.
+
+--
+
+* `FlatMap` is about working with functions that return values in some `F`.
+
+--
+
+* `Monad` is both an `Applicative` and a `FlatMap`.
+
+---
+class: center, middle
+name: questions
+
+[<img src="img/qr-code.svg" width="50%" height="50%"/>][Slides]
+
+[Nicolas Rinaudo] • [@NicolasRinaudo]
+
+[@NicolasRinaudo]:https://twitter.com/NicolasRinaudo
+[Nicolas Rinaudo]:https://nrinaudo.github.io/
+[Slides]:https://nrinaudo.github.io/talks/function_reuse.html
+    </textarea>
+    <script src="js/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        var slideshow = remark.create({
+          highlightStyle: 'github',
+          highlightSpans: true,
+          highlightLines: true
+      });
+    </script>
+  </body>
+</html>

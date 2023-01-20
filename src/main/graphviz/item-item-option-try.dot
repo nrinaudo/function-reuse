@@ -1,0 +1,14 @@
+digraph {
+    Item
+    Option[label="Option[Item]" class="goal"]
+    Future[label="Future[Item]" class="goal,disabled"]
+    Try[label="Try[Item]" class="goal"]
+    Either[label="Either[Error, Item]" class="goal,disabled"]
+    Etc[label="..." class="goal,disabled"]
+
+    Option -> Item[dir="back"]
+    Future -> Item[dir="back" class="disabled"]
+    Item -> Try
+    Item -> Either[class="disabled"]
+    Item -> Etc[class="disabled"]
+}

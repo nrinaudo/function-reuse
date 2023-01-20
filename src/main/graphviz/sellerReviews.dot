@@ -1,0 +1,36 @@
+digraph {
+    Start[class="extremity"]
+    Goal[class="extremity"]
+
+    Seller[group="middle" class="start"]
+    ListUUID[label="List[ReviewId]" group="middle"]
+    ListFReview[label="List[F[Review]]" group="middle"]
+    FListReview[label="F[List[Review]]" class="goal" group="lower"]
+    ListReview[label="List[Review]" group="middle"]
+
+    UUID[label="ReviewId" group="lower"]
+    FReview[label="F[Review]" group="lower"]
+
+    {
+        rank=same
+        ListUUID -> UUID[class="lift" label="lift" dir="back"]
+    }
+
+    {
+        rank=same
+        ListFReview -> FReview[class="lift" label="lift" dir="back"]
+    }
+
+    {
+        rank=same
+        ListReview -> FListReview[style="invis"]
+    }
+
+    Start -> Seller[class="start"]
+    FListReview -> Goal[class="goal"]
+    UUID -> FReview[label="loadReview"]
+    Seller -> ListUUID[label="reviews"]
+    ListUUID -> ListFReview[label="loadReview.lift"]
+    ListFReview -> ListReview[style="invis"]
+    ListFReview -> FListReview[label="flip"]
+}
