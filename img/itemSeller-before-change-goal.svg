@@ -23,16 +23,16 @@
 </g>
 <!-- Goal -->
 <!-- Seller -->
-<g id="node3" class="node goal,disabled">
+<g id="node3" class="node goal">
 <title>Seller</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M372.6,-108C372.6,-108 342.6,-108 342.6,-108 336.6,-108 330.6,-102 330.6,-96 330.6,-96 330.6,-84 330.6,-84 330.6,-78 336.6,-72 342.6,-72 342.6,-72 372.6,-72 372.6,-72 378.6,-72 384.6,-78 384.6,-84 384.6,-84 384.6,-96 384.6,-96 384.6,-102 378.6,-108 372.6,-108"/>
+<path fill="#586e75" stroke="#586e75" d="M372.6,-108C372.6,-108 342.6,-108 342.6,-108 336.6,-108 330.6,-102 330.6,-96 330.6,-96 330.6,-84 330.6,-84 330.6,-78 336.6,-72 342.6,-72 342.6,-72 372.6,-72 372.6,-72 378.6,-72 384.6,-78 384.6,-84 384.6,-84 384.6,-96 384.6,-96 384.6,-102 378.6,-108 372.6,-108"/>
 <text text-anchor="middle" x="357.6" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">Seller</text>
 </g>
 <!-- Seller&#45;&gt;Goal -->
-<g id="edge6" class="edge goal,disabled">
+<g id="edge6" class="edge goal">
 <title>Seller&#45;&gt;Goal</title>
-<path fill="none" stroke="#d0dce3" stroke-width="2" d="M384.88,-90C397,-90 410.74,-90 420.13,-90"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" stroke-width="2" points="420.26,-93.5 430.26,-90 420.26,-86.5 420.26,-93.5"/>
+<path fill="none" stroke="#586e75" stroke-width="2" d="M384.88,-90C397,-90 410.74,-90 420.13,-90"/>
+<polygon fill="#586e75" stroke="#586e75" stroke-width="2" points="420.26,-93.5 430.26,-90 420.26,-86.5 420.26,-93.5"/>
 </g>
 <!-- FSeller -->
 <g id="node4" class="node">
@@ -42,10 +42,10 @@
 </g>
 <!-- Seller&#45;&gt;FSeller -->
 <!-- UUID -->
-<g id="node6" class="node">
+<g id="node6" class="node disabled">
 <title>UUID</title>
-<path fill="#ffffff" stroke="#586e75" d="M222.6,-108C222.6,-108 180.6,-108 180.6,-108 174.6,-108 168.6,-102 168.6,-96 168.6,-96 168.6,-84 168.6,-84 168.6,-78 174.6,-72 180.6,-72 180.6,-72 222.6,-72 222.6,-72 228.6,-72 234.6,-78 234.6,-84 234.6,-84 234.6,-96 234.6,-96 234.6,-102 228.6,-108 222.6,-108"/>
-<text text-anchor="middle" x="201.6" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">SellerId</text>
+<path fill="#ffffff" stroke="#d0dce3" d="M222.6,-108C222.6,-108 180.6,-108 180.6,-108 174.6,-108 168.6,-102 168.6,-96 168.6,-96 168.6,-84 168.6,-84 168.6,-78 174.6,-72 180.6,-72 180.6,-72 222.6,-72 222.6,-72 228.6,-72 234.6,-78 234.6,-84 234.6,-84 234.6,-96 234.6,-96 234.6,-102 228.6,-108 222.6,-108"/>
+<text text-anchor="middle" x="201.6" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">SellerId</text>
 </g>
 <!-- Item&#45;&gt;UUID -->
 <g id="edge2" class="edge disabled">
@@ -56,11 +56,11 @@
 </g>
 <!-- UUID&#45;&gt;Seller -->
 <!-- UUID&#45;&gt;FSeller -->
-<g id="edge4" class="edge required">
+<g id="edge4" class="edge required,disabled">
 <title>UUID&#45;&gt;FSeller</title>
-<path fill="none" stroke="#586e75" stroke-dasharray="1,5" d="M234.88,-74.91C257.33,-64.41 287.53,-50.29 312.24,-38.74"/>
-<polygon fill="#586e75" stroke="#586e75" points="313.83,-41.86 321.41,-34.45 310.87,-35.52 313.83,-41.86"/>
-<text text-anchor="middle" x="278.1" y="-68.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">loadSeller</text>
+<path fill="none" stroke="#d0dce3" stroke-dasharray="1,5" d="M234.88,-74.91C257.33,-64.41 287.53,-50.29 312.24,-38.74"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="313.83,-41.86 321.41,-34.45 310.87,-35.52 313.83,-41.86"/>
+<text text-anchor="middle" x="278.1" y="-68.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">loadSeller</text>
 </g>
 </g>
 </svg>

@@ -36,10 +36,10 @@
 <text text-anchor="middle" x="132.6" y="-93.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">reviews</text>
 </g>
 <!-- ListFReview -->
-<g id="node5" class="node">
+<g id="node5" class="node disabled">
 <title>ListFReview</title>
-<path fill="#ffffff" stroke="#586e75" d="M495.6,-108C495.6,-108 402.6,-108 402.6,-108 396.6,-108 390.6,-102 390.6,-96 390.6,-96 390.6,-84 390.6,-84 390.6,-78 396.6,-72 402.6,-72 402.6,-72 495.6,-72 495.6,-72 501.6,-72 507.6,-78 507.6,-84 507.6,-84 507.6,-96 507.6,-96 507.6,-102 501.6,-108 495.6,-108"/>
-<text text-anchor="middle" x="449.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">List[F[Review]]</text>
+<path fill="#ffffff" stroke="#d0dce3" d="M495.6,-108C495.6,-108 402.6,-108 402.6,-108 396.6,-108 390.6,-102 390.6,-96 390.6,-96 390.6,-84 390.6,-84 390.6,-78 396.6,-72 402.6,-72 402.6,-72 495.6,-72 495.6,-72 501.6,-72 507.6,-78 507.6,-84 507.6,-84 507.6,-96 507.6,-96 507.6,-102 501.6,-108 495.6,-108"/>
+<text text-anchor="middle" x="449.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">List[F[Review]]</text>
 </g>
 <!-- ListUUID&#45;&gt;ListFReview -->
 <g id="edge8" class="edge disabled">
@@ -68,16 +68,16 @@
 <text text-anchor="middle" x="618.1" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">F[List[Review]]</text>
 </g>
 <!-- ListFReview&#45;&gt;FListReview -->
-<g id="edge10" class="edge">
+<g id="edge10" class="edge disabled">
 <title>ListFReview&#45;&gt;FListReview</title>
-<path fill="none" stroke="#586e75" d="M492.24,-71.83C514.58,-62.2 542.19,-50.29 565.77,-40.13"/>
-<polygon fill="#586e75" stroke="#586e75" points="567.46,-43.21 575.26,-36.04 564.69,-36.78 567.46,-43.21"/>
-<text text-anchor="middle" x="533.6" y="-60.2" font-family="Inter,Arial" font-size="11.00" fill="#586e75">flip</text>
+<path fill="none" stroke="#d0dce3" d="M492.24,-71.83C514.58,-62.2 542.19,-50.29 565.77,-40.13"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="567.46,-43.21 575.26,-36.04 564.69,-36.78 567.46,-43.21"/>
+<text text-anchor="middle" x="533.6" y="-60.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">flip</text>
 </g>
 <!-- ListReview -->
-<g id="node7" class="node goal,disabled">
+<g id="node7" class="node goal">
 <title>ListReview</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M655.1,-108C655.1,-108 581.1,-108 581.1,-108 575.1,-108 569.1,-102 569.1,-96 569.1,-96 569.1,-84 569.1,-84 569.1,-78 575.1,-72 581.1,-72 581.1,-72 655.1,-72 655.1,-72 661.1,-72 667.1,-78 667.1,-84 667.1,-84 667.1,-96 667.1,-96 667.1,-102 661.1,-108 655.1,-108"/>
+<path fill="#586e75" stroke="#586e75" d="M655.1,-108C655.1,-108 581.1,-108 581.1,-108 575.1,-108 569.1,-102 569.1,-96 569.1,-96 569.1,-84 569.1,-84 569.1,-78 575.1,-72 581.1,-72 581.1,-72 655.1,-72 655.1,-72 661.1,-72 667.1,-78 667.1,-84 667.1,-84 667.1,-96 667.1,-96 667.1,-102 661.1,-108 655.1,-108"/>
 <text text-anchor="middle" x="618.1" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">List[Review]</text>
 </g>
 <!-- ListFReview&#45;&gt;ListReview -->
@@ -95,10 +95,10 @@
 <text text-anchor="middle" x="440.1" y="-51.2" font-family="Inter,Arial" font-size="11.00" fill="#d0dce3">lift</text>
 </g>
 <!-- ListReview&#45;&gt;Goal -->
-<g id="edge5" class="edge goal,disabled">
+<g id="edge5" class="edge goal">
 <title>ListReview&#45;&gt;Goal</title>
-<path fill="none" stroke="#d0dce3" stroke-width="2" d="M667.31,-90C680.72,-90 694.07,-90 703.12,-90"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" stroke-width="2" points="703.35,-93.5 713.35,-90 703.35,-86.5 703.35,-93.5"/>
+<path fill="none" stroke="#586e75" stroke-width="2" d="M667.31,-90C680.72,-90 694.07,-90 703.12,-90"/>
+<polygon fill="#586e75" stroke="#586e75" stroke-width="2" points="703.35,-93.5 713.35,-90 703.35,-86.5 703.35,-93.5"/>
 </g>
 <!-- ListReview&#45;&gt;FListReview -->
 <!-- UUID&#45;&gt;FReview -->
